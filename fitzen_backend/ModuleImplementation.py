@@ -30,4 +30,7 @@ while True:
 
     # displaying the video feed
     cv2.imshow("Hand Image", HandImg)
-    cv2.waitKey(1)
+    if cv2.waitKey(10) & 0xFF == ord("q"):
+        break
+    
+
