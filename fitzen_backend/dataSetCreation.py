@@ -13,11 +13,8 @@ mp_holistic = mp.solutions.holistic
 # class names for when getting data points to csv for training the model
 # WHEN TRAINING FOR A NEW POSE, SWITCH OUT THE CLASSNAMES AND GET INTO
 # THAT RESPECTIVE POSE BEFORE RUNNING THE CODE
-# class_name='daylight_proper_posture'
-# class_name='daylight_bad_posture'
-
-# class_name='nightlight_good_posture'
-# class_name='nightlight_bad_posture'
+# class_name='proper_posture'
+# class_name='bad_posture'
 # class_name = 'too_close'
 # class_name = 'looking_away'
 # class_name = 'tired'

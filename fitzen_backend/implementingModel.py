@@ -17,7 +17,10 @@ mp_drawing = mp.solutions.drawing_utils
 # pose detection
 mp_holistic = mp.solutions.holistic
 
-with open('ensemble_pose_classifier.pkl', 'rb') as f:
+# with open('ensemble_pose_classifier.pkl', 'rb') as f:
+#     model = pickle.load(f)
+
+with open("fitzen_backend\GradientBoosting_pose_classifierV1.pkl", "rb") as f:
     model = pickle.load(f)
 
 cap = cv2.VideoCapture(0)
@@ -63,8 +66,8 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
         # mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_holistic.POSE_CONNECTIONS,
         #                          mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=4),
         #                          mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2)
-        #  
-        # 
+        #
+        #
         # )
         # Export coordinates
         try:
@@ -115,14 +118,14 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
             # Display Class
             cv2.putText(image, 'CLASS', (95, 12),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-            
+
             cv2.putText(image, pose_language_class.split(' ')[
                         0], (90, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
             # Display Probability
             cv2.putText(image, 'PROB', (15, 12),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-            
+
             cv2.putText(image, str(round(pose_language_prob[np.argmax(pose_language_prob)], 2)), (
                 10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2, cv2.LINE_AA)
 
