@@ -1,5 +1,6 @@
 import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/views/home.dart';
+import 'package:fitzen_frontend/views/tracking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

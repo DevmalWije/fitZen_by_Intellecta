@@ -4,8 +4,9 @@ class SummaryCard extends StatelessWidget {
   final String title;
   final String value;
   final Color color;
+  final EdgeInsetsGeometry? padding;
 
-  const SummaryCard({Key? key, required this.title, required this.value, required this.color})
+  const SummaryCard({Key? key, required this.title, required this.value, required this.color, this.padding})
       : super(key: key);
 
   @override
@@ -17,7 +18,7 @@ class SummaryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 42),
+        padding: padding ?? EdgeInsets.symmetric(vertical: 36, horizontal: 42),
         child: Column(
           children: [
             Text(

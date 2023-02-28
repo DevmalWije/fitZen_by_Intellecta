@@ -112,7 +112,7 @@ class Home extends StatelessWidget {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "Start",
+                          "Start Tracking",
                           style: Theme.of(context).textTheme.button,
                           textAlign: TextAlign.center,
                         ),
