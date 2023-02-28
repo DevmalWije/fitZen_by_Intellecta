@@ -4,8 +4,21 @@ import 'package:fitzen_frontend/views/settings.dart';
 import 'package:fitzen_frontend/views/tracking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:window_manager/window_manager.dart';
 
-void main(){
+void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // // Must add this line.
+  // await windowManager.ensureInitialized();
+  //
+  // WindowOptions windowOptions = WindowOptions(
+  //   center: true,
+  // );
+  // windowManager.waitUntilReadyToShow(windowOptions, () async {
+  //   await windowManager.show();
+  //   await windowManager.setResizable(false);
+  //   await windowManager.focus();
+  // });
   runApp(FitZen());
 }
 
