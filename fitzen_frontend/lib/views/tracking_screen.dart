@@ -2,6 +2,8 @@ import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/widgets/summary_card.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/button.dart';
+
 class TrackingScreen extends StatelessWidget {
   const TrackingScreen({Key? key}) : super(key: key);
 
@@ -137,32 +139,12 @@ class TrackingScreen extends StatelessWidget {
                   ),
                   SizedBox(width: 150),
 
-                  //start button
-                  ElevatedButton(
+                  //stop button
+                  Button(
+                    text: "Stop Tracking",
+                    icon: Icons.timer_outlined,
+                    backgroundColor: kRed,
                     onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: kRed,
-                      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.timer_outlined,
-                          color: Colors.white,
-                          size: 25,
-                        ),
-                        SizedBox(width: 20),
-                        Text(
-                          "Stop Tracking",
-                          style: Theme.of(context).textTheme.button,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),

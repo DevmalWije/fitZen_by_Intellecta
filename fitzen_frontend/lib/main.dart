@@ -37,7 +37,7 @@ class FitZen extends StatelessWidget {
           ),
         ),
       ),
-      home: Home(),
+      home: TrackingScreen(),
     );
   }
 }
