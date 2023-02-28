@@ -20,10 +20,11 @@ mp_holistic = mp.solutions.holistic
 # with open('ensemble_pose_classifier.pkl', 'rb') as f:
 #     model = pickle.load(f)
 
-with open("fitzen_backend\GradientBoosting_pose_classifierV1.pkl", "rb") as f:
+with open("fitzen_backend/GradientBoosting_pose_classifierV1.pkl", "rb") as f:
     model = pickle.load(f)
 
 cap = cv2.VideoCapture(0)
+
 # Initiate holistic model
 with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
 
@@ -69,6 +70,7 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
         #
         #
         # )
+
         # Export coordinates
         try:
             # Extract Pose landmarks

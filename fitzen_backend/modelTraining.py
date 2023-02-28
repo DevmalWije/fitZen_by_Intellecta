@@ -33,6 +33,7 @@ y = df['class']
 # seperating training and testing data
 x_train, x_test, y_train, y_test = train_test_split(
     x, y, test_size=0.3, random_state=1234)
+
 # print(len(x_train))
 
 # production classification pipelines
