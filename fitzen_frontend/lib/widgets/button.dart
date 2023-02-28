@@ -4,6 +4,7 @@ class Button extends StatelessWidget {
   final Color backgroundColor;
   final String text;
   final IconData? icon;
+  final EdgeInsetsGeometry? padding;
   final Function() onPressed;
 
   const Button(
@@ -11,7 +12,7 @@ class Button extends StatelessWidget {
       required this.backgroundColor,
       required this.text,
       this.icon,
-      required this.onPressed})
+      required this.onPressed, this.padding})
       : super(key: key);
 
   @override
@@ -20,13 +21,14 @@ class Button extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
-        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 50),
+        padding: padding ?? EdgeInsets.symmetric(vertical: 30, horizontal: 50),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null)
             Icon(

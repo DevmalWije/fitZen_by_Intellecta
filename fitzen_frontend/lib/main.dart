@@ -1,5 +1,6 @@
 import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/views/home.dart';
+import 'package:fitzen_frontend/views/settings.dart';
 import 'package:fitzen_frontend/views/tracking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,6 +25,11 @@ class FitZen extends StatelessWidget {
               fontWeight: FontWeight.w700,
               color: Colors.white,
             ),
+            headline2: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.w700,
+              color: Color(0xff505050),
+            ),
             caption: TextStyle(
               fontSize: 24,
               color: Colors.white,
@@ -37,7 +43,7 @@ class FitZen extends StatelessWidget {
           ),
         ),
       ),
-      home: TrackingScreen(),
+      home: Settings(),
     );
   }
 }
