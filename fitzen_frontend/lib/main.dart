@@ -5,6 +5,7 @@ import 'package:fitzen_frontend/views/tracking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:fitzen_frontend/views/signup.dart';
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,7 @@ void main() {
   //   await windowManager.focus();
   // });
   runApp(FitZen());
+  //runApp(MyApp());
 }
 
 class FitZen extends StatelessWidget {
