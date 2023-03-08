@@ -15,7 +15,7 @@ while True:
         pointLeft = face[145]
         pointRight = face[374]
 
-        # for drawing
+        # for drawing the connection between eyes
         # cv2.line(img, pointLeft, pointRight, (0, 200, 0), 3)
         # cv2.circle(img, pointLeft, 5, (255, 0, 255), cv2.FILLED)
         # cv2.circle(img, pointRight, 5, (255, 0, 255), cv2.FILLED)
@@ -43,6 +43,7 @@ while True:
             cvzone.putTextRect(img, f'Too Close',
                                (face[10][0] - 100, face[10][1] - 50),
                                scale=2)
+            #adding python notificatons
             # notification.notify(
             #     title='Face Distance',
             #     message='Too Close!',
@@ -54,7 +55,7 @@ while True:
             cvzone.putTextRect(img, f'Too Far',
                                (face[10][0] - 100, face[10][1] - 50),
                                scale=2)
-
+            #adding python notificatons
             # notification.notify(
             #     title='Face Distance',
             #     message='Too Far!',
