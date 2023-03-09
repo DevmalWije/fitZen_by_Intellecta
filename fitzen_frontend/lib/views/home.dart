@@ -1,11 +1,52 @@
 import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/widgets/summary_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import '../widgets/button.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  late final MediaStream _localStream;
+  final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
+
+  Future<void> getLocalCameraStream() async {
+    final Map<String, dynamic> mediaConstraints = {
+      'audio': false,
+      'video': true,
+    };
+
+    MediaStream mediaStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+
+    setState(() {
+      _localStream = mediaStream;
+      _localRenderer.srcObject = _localStream;
+    });
+  }
+
+  void initializeRenderer() async {
+    await _localRenderer.initialize();
+    getLocalCameraStream();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializeRenderer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _localRenderer.dispose();
+    _localStream.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,26 +112,37 @@ class Home extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   //camera view
-                  SizedBox(
-                    height: double.infinity,
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    child: Card(
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: FloatingActionButton(
-                            onPressed: () {},
-                            backgroundColor: Colors.white.withOpacity(0.25),
-                            child: Icon(Icons.camera_alt),
+                  Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      //camera view
+                      SizedBox(
+                        height: double.infinity,
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Card(
+                          color: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: RTCVideoView(
+                            _localRenderer,
+                            placeholderBuilder: (_){
+                              return Center(child: CircularProgressIndicator());
+                            },
                           ),
                         ),
                       ),
-                    ),
+
+                      //toggle button
+                      Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: FloatingActionButton(
+                          onPressed: () {},
+                          backgroundColor: Colors.white.withOpacity(0.25),
+                          child: Icon(Icons.camera_alt),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(width: 150),
 
