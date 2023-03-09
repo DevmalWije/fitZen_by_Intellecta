@@ -13,8 +13,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late final MediaStream _localStream;
+  MediaStream? _localStream;
   final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
+  bool _isCameraOn = true;
 
   Future<void> getLocalCameraStream() async {
     final Map<String, dynamic> mediaConstraints = {
@@ -28,6 +29,17 @@ class _HomeState extends State<Home> {
       _localStream = mediaStream;
       _localRenderer.srcObject = _localStream;
     });
+  }
+
+  void toggleCameraOnOff() {
+    setState(() {
+      _isCameraOn = !_isCameraOn;
+    });
+
+    if (_localStream != null) {
+      final videoTrack = _localStream!.getVideoTracks()[0];
+      videoTrack.enabled = _isCameraOn;
+    }
   }
 
   void initializeRenderer() async {
