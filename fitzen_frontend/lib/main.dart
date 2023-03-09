@@ -21,11 +21,11 @@ class FitZen extends StatelessWidget {
             headline1: TextStyle(
               fontSize: 50,
               fontWeight: FontWeight.w700,
-              color: Colors.black,
+              color: Colors.white,
             ),
             caption: TextStyle(
               fontSize: 24,
-              color: Color.fromARGB(255, 255, 255, 255),
+              color: Colors.white,
               fontWeight: FontWeight.w400,
             ),
             button: TextStyle(
