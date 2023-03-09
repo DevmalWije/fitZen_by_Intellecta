@@ -13,7 +13,7 @@ import pickle
 
 
 # reading in the data
-df = pd.read_csv("coords.csv")
+df = pd.read_csv("newCoords-recoverd.csv")
 
 # class names for when getting data points to csv for training the model
 # class_name='proper_posture'
@@ -39,9 +39,7 @@ x_train, x_test, y_train, y_test = train_test_split(
 # production classification pipelines
 piplines = {
     'lr': make_pipeline(StandardScaler(), LogisticRegression()),
-    'rc': make_pipeline(StandardScaler(), RidgeClassifier()),
     'rf': make_pipeline(StandardScaler(), RandomForestClassifier()),
-    'gb': make_pipeline(StandardScaler(), GradientBoostingClassifier()),
 }
 
 # training the models
@@ -59,5 +57,5 @@ for algo, model in fit_models.items():
     print(algo, accuracy_score(y_test, yhat))
 
 # saving the model
-with open("GradientBoosting_pose_classifierV1.pkl", "wb") as f:
-    pickle.dump(fit_models["gb"], f)
+with open("randomForest_pose_classifierV1.pkl", "wb") as f:
+    pickle.dump(fit_models["rf"], f)
