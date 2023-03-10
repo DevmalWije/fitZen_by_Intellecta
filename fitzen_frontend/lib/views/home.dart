@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
   void dispose() {
     super.dispose();
     _localRenderer.dispose();
-    _localStream.dispose();
+    _localStream?.dispose();
   }
 
   @override
@@ -149,9 +149,9 @@ class _HomeState extends State<Home> {
                       Padding(
                         padding: const EdgeInsets.all(15),
                         child: FloatingActionButton(
-                          onPressed: () {},
+                          onPressed: toggleCameraOnOff,
                           backgroundColor: Colors.white.withOpacity(0.25),
-                          child: Icon(Icons.camera_alt),
+                          child: Icon(_isCameraOn ? Icons.videocam : Icons.videocam_off),
                         ),
                       ),
                     ],
