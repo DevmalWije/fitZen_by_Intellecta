@@ -57,5 +57,5 @@ for algo, model in fit_models.items():
     print(algo, accuracy_score(y_test, yhat))
 
 # saving the model
-with open("randomForest_pose_classifierV1.pkl", "wb") as f:
+with open("fitzen_backend/randomForest_pose_classifierV2.pkl", "wb") as f:
     pickle.dump(fit_models["rf"], f)

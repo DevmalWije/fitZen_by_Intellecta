@@ -49,9 +49,6 @@ while True:
             # notification.notify(
             #     title='Face Distance',
             #     message='Too Close!',
-
-
-@ -54, 19 + 55, 19 @ @
             cvzone.putTextRect(img, f'Too Far',
                                (face[10][0] - 100, face[10][1] - 50),
                                scale=2)
