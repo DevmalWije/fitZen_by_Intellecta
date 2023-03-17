@@ -1,11 +1,11 @@
 import 'package:fitzen_frontend/constants.dart';
+import 'package:fitzen_frontend/signUp/signup_page.dart';
 import 'package:fitzen_frontend/views/home.dart';
 import 'package:fitzen_frontend/views/settings.dart';
 import 'package:fitzen_frontend/views/tracking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:fitzen_frontend/views/signup.dart';
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -58,7 +58,7 @@ class FitZen extends StatelessWidget {
           ),
         ),
       ),
-      home: Home(),
+      home: SignUpScreen(),
     );
   }
 }

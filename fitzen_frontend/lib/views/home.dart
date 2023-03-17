@@ -23,7 +23,8 @@ class _HomeState extends State<Home> {
       'video': true,
     };
 
-    MediaStream mediaStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+    MediaStream mediaStream =
+        await navigator.mediaDevices.getUserMedia(mediaConstraints);
 
     setState(() {
       _localStream = mediaStream;
@@ -138,7 +139,7 @@ class _HomeState extends State<Home> {
                           ),
                           child: RTCVideoView(
                             _localRenderer,
-                            placeholderBuilder: (_){
+                            placeholderBuilder: (_) {
                               return Center(child: CircularProgressIndicator());
                             },
                           ),
@@ -151,7 +152,9 @@ class _HomeState extends State<Home> {
                         child: FloatingActionButton(
                           onPressed: toggleCameraOnOff,
                           backgroundColor: Colors.white.withOpacity(0.25),
-                          child: Icon(_isCameraOn ? Icons.videocam : Icons.videocam_off),
+                          child: Icon(_isCameraOn
+                              ? Icons.videocam
+                              : Icons.videocam_off),
                         ),
                       ),
                     ],
@@ -163,7 +166,7 @@ class _HomeState extends State<Home> {
                     text: "Start Tracking",
                     icon: Icons.timer_outlined,
                     backgroundColor: kGreen,
-                    onPressed: (){},
+                    onPressed: () {},
                   ),
                 ],
               ),
