@@ -21,16 +21,13 @@ while True:
     # mediapipe face detection - BGR to RGB conversion
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = mp_face_detection.process(frame)
-
-    # draw the detection box
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-    # below if else statement means - if there is any face in the feed, then draw the boxes
 
+    # below if else statement means - if there is any face in the feed, then draw the bounding boxes
     if results.detections:
         total_frames = total_frames + 1
         for detection in results.detections:
             mp_drawing.draw_detection(frame, detection)
-            # x,y,w,h = cv2.Rectangle(mp_drawing.draw_detection().rect_start_point, mp_drawing.draw_detection().rect_end_point )
             minutes = round(total_frames / 30) / 60
             dwell_time = str(datetime.timedelta(minutes=minutes))
             dwell_time_text = f"Time detected: {dwell_time}"
