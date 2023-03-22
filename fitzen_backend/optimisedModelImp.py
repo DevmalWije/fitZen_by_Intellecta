@@ -10,7 +10,7 @@ import warnings
 
 # drawing utilities
 mp_drawing = mp.solutions.drawing_utils
-# pose detection
+# pose detectionL
 mp_holistic = mp.solutions.holistic
 cap = cv2.VideoCapture(0)
 
@@ -23,13 +23,18 @@ with open("randomForest_pose_classifierV1.pkl", "rb") as f:
 holistic = mp.solutions.holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5)
     
 def image_frame_model(image_folder):
-    image_names = sorted(os.listdir(image_folder))
+    # image_names = sorted(os.listdir(image_folder))
     posture_list = []
 
-    for img_name in image_names:
-        img_path = os.path.join(image_folder, img_name)
-        frame = cv2.imread(img_path)
+    # for img_name in image_names:
+    #     img_path = os.path.join(image_folder, img_name)
+    #     frame = cv2.imread(img_path)
+    
+    while cap.isOpened():
+        
 
+        ret, frame = cap.read()
+        
         # Recolor Feed
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         image.flags.writeable = False
@@ -67,6 +72,37 @@ def image_frame_model(image_folder):
             X = [[0, 1], [1, 0]]
             scaler = StandardScaler()
             scaler.fit(X)
+            
+            # Grab ear coords
+            coords = tuple(np.multiply(
+                np.array(
+                    (results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_EAR].x,
+                        results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_EAR].y)), [640, 480]).astype(int))
+
+            cv2.rectangle(image,
+                            (coords[0], coords[1]+5),
+                            (coords[0]+len(pose_language_class)
+                                * 20, coords[1]-30),
+                            (245, 117, 16), -1)
+            cv2.putText(image, pose_language_class, coords,
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+            # Get status box
+            cv2.rectangle(image, (0, 0), (340, 60), (245, 117, 16), -1)
+
+            # Display Class
+            cv2.putText(image, 'CLASS', (95, 12),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+
+            cv2.putText(image, pose_language_class.split(' ')[
+                        0], (90, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+            # Display Probability
+            cv2.putText(image, 'PROB', (15, 12),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+
+            cv2.putText(image, str(round(pose_language_prob[np.argmax(pose_language_prob)], 2)), (
+                10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2, cv2.LINE_AA)
 
 
             posture_list.append(pose_language_class)
@@ -80,7 +116,7 @@ def image_frame_model(image_folder):
 
         cv2.imshow('Raw Webcam Feed', image)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if cv2.waitKey(50) & 0xFF == ord('q'):
             break
 
     proper_posture_count = posture_list.count("proper_posture")

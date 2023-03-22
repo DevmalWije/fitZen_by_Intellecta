@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\IIT courswork\L-5-SE-2023\5COSC021C.2 Software Development Group Project\SDGP group-work\fitZen_by_Intellecta\fitzen_frontend\windows\flutter\ephemeral\cpp_client_wrapper\core_implementations.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\IIT courswork\L-5-SE-2023\5COSC021C.2 Software Development Group Project\SDGP group-work\fitZen_by_Intellecta\fitzen_frontend\windows\flutter\ephemeral\cpp_client_wrapper\standard_codec.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\IIT courswork\L-5-SE-2023\5COSC021C.2 Software Development Group Project\SDGP group-work\fitZen_by_Intellecta\fitzen_frontend\windows\flutter\ephemeral\cpp_client_wrapper\plugin_registrar.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\IIT courswork\L-5-SE-2023\5COSC021C.2 Software Development Group Project\SDGP group-work\fitZen_by_Intellecta\fitzen_frontend\windows\flutter\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{BFC42BB7-AD8D-37D2-8C83-CB0621661827}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{CB57431D-0550-309C-A6F4-14FB1882E787}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

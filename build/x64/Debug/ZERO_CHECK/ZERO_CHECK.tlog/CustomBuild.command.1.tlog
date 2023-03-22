@@ -1,0 +1,10 @@
+^D:\IIT COURSWORK\L-5-SE-2023\5COSC021C.2 SOFTWARE DEVELOPMENT GROUP PROJECT\SDGP GROUP-WORK\FITZEN_BY_INTELLECTA\BUILD\CMAKEFILES\EFDFB4E807D037231F9183DB1AF5813B\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SD:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/fitzen_frontend/windows" "-BD:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/fitzen_frontend.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
