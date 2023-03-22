@@ -86,12 +86,17 @@ class VideoTransformTrack(MediaStreamTrack):
 
     kind = "video"
 
-    def __init__(self, track):
+    def __init__(self, track, channel):
         super().__init__()  # don't forget this!
         self.track = track
+        self.channel = channel
 
     async def recv(self):
         frame = await self.track.recv()
+        # send a message on the data channel
+        print(self.channel.readyState)
+        if self.channel.readyState == "open":
+            self.channel.send("Hello, client!")
 
         # Use to_rgb() function of VideoFrame object to avoid color conversion step
         image = frame.to_rgb().to_ndarray()
@@ -124,6 +129,9 @@ async def offer(request):
 
     pc = RTCPeerConnection()
 
+    # create a new data channel
+    channel = pc.createDataChannel("mychannel")
+
     # @pc.on("datachannel")
     # def on_datachannel(channel):
     #     @channel.on("message")
@@ -141,7 +149,7 @@ async def offer(request):
     def on_track(track):
         print("Track %s received", track.kind)
         if track.kind == "video":
-            pc.addTrack(VideoTransformTrack(relay.subscribe(track)))
+            pc.addTrack(VideoTransformTrack(relay.subscribe(track), channel))
 
         @track.on("ended")
         async def on_ended():

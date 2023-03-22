@@ -18,6 +18,21 @@ class _TrackingScreenState extends State<TrackingScreen> {
   RTCPeerConnection? _peerConnection;
   MediaStream? _localStream;
   final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
+  RTCDataChannel? _dataChannel;
+  RTCDataChannelInit? _dataChannelDict;
+
+  void _onDataChannelState(RTCDataChannelState? state) {
+    switch (state) {
+      case RTCDataChannelState.RTCDataChannelClosed:
+        print("channel Closed!!!!!!!");
+        break;
+      case RTCDataChannelState.RTCDataChannelOpen:
+        print("channel Opened!!!!!!!");
+        break;
+      default:
+        print("Data Channel State: $state");
+    }
+  }
 
   Future<bool> _waitForGatheringComplete(_) async {
     print("WAITING FOR GATHERING COMPLETE");
@@ -96,11 +111,13 @@ class _TrackingScreenState extends State<TrackingScreen> {
     // _dataChannelDict = RTCDataChannelInit();
     // _dataChannelDict!.ordered = true;
     // _dataChannel = await _peerConnection!.createDataChannel(
-    //   "chat",
+    //   "mychannel",
     //   _dataChannelDict!,
     // );
     // _dataChannel!.onDataChannelState = _onDataChannelState;
-    // _dataChannel!.onMessage = _onDataChannelMessage;
+    // _dataChannel!.onMessage = (RTCDataChannelMessage message){
+    //   print(message.text);
+    // };
 
     final mediaConstraints = <String, dynamic>{
       'audio': false,
