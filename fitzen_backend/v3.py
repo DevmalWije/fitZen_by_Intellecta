@@ -93,8 +93,8 @@ class VideoTransformTrack(MediaStreamTrack):
 
     async def recv(self):
         frame = await self.track.recv()
+
         # send a message on the data channel
-        print(self.channel.readyState)
         if self.channel.readyState == "open":
             self.channel.send("Hello, client!")
 
