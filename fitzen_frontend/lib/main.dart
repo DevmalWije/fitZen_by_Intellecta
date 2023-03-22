@@ -58,7 +58,7 @@ class FitZen extends StatelessWidget {
           ),
         ),
       ),
-      home: SignUpScreen(),
+      home: TrackingScreen(),
     );
   }
 }
