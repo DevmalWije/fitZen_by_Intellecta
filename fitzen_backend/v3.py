@@ -170,6 +170,15 @@ async def offer(request):
     )
 
 
+
+def root(request):
+    return web.Response(
+        content_type="application/json",
+        text=json.dumps(
+            {"connection": "success"}
+        ),
+    )
+
 # async def on_shutdown(app):
     # close peer connections
     # await pc.close()
@@ -178,6 +187,7 @@ app = web.Application()
 cors = aiohttp_cors.setup(app)
 # app.on_shutdown.append(on_shutdown)
 app.router.add_post("/offer", offer)
+app.router.add_get("/", root)
 
 for route in list(app.router.routes()):
     cors.add(route, {
@@ -189,4 +199,4 @@ for route in list(app.router.routes()):
         )
     })
 
-web.run_app(app, host='127.0.0.1', port='8080')
+web.run_app(app, host='127.0.0.1', port='3000')

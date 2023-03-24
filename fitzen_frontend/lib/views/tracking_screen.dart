@@ -60,7 +60,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
       var request = http.Request(
         'POST',
         Uri.parse(
-            'http://127.0.0.1:8080/offer'),
+            'http://143.198.80.241:3000/offer'),
       );
       request.body = json.encode(
         {
