@@ -59,8 +59,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
       };
       var request = http.Request(
         'POST',
-        Uri.parse(
-            'http://143.198.80.241:3000/offer'),
+        Uri.parse(API),
       );
       request.body = json.encode(
         {
@@ -108,16 +107,16 @@ class _TrackingScreenState extends State<TrackingScreen> {
     _peerConnection!.onTrack = _onTrack;
 
     //* Create Data Channel
-    // _dataChannelDict = RTCDataChannelInit();
-    // _dataChannelDict!.ordered = true;
-    // _dataChannel = await _peerConnection!.createDataChannel(
-    //   "mychannel",
-    //   _dataChannelDict!,
-    // );
-    // _dataChannel!.onDataChannelState = _onDataChannelState;
-    // _dataChannel!.onMessage = (RTCDataChannelMessage message){
-    //   print(message.text);
-    // };
+    _dataChannelDict = RTCDataChannelInit();
+    _dataChannelDict!.ordered = true;
+    _dataChannel = await _peerConnection!.createDataChannel(
+      "data",
+      _dataChannelDict!,
+    );
+    _dataChannel!.onDataChannelState = _onDataChannelState;
+    _dataChannel!.onMessage = (RTCDataChannelMessage message){
+      print('Data channel message received: ${message.text}');
+    };
 
     final mediaConstraints = <String, dynamic>{
       'audio': false,

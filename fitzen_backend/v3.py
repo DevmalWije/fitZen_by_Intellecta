@@ -85,19 +85,16 @@ class VideoTransformTrack(MediaStreamTrack):
     """
 
     kind = "video"
+    channel = None
 
-    def __init__(self, track, channel):
+    def __init__(self, track):
         super().__init__()  # don't forget this!
         self.track = track
-        self.channel = channel
 
     async def recv(self):
         frame = await self.track.recv()
 
-        # send a message on the data channel
-        if self.channel.readyState == "open":
-            self.channel.send("Hello, client!")
-
+        VideoTransformTrack.channel.send("ggg")
         # Use to_rgb() function of VideoFrame object to avoid color conversion step
         image = frame.to_rgb().to_ndarray()
 
@@ -129,27 +126,25 @@ async def offer(request):
 
     pc = RTCPeerConnection()
 
-    # create a new data channel
-    channel = pc.createDataChannel("mychannel")
-
-    # @pc.on("datachannel")
-    # def on_datachannel(channel):
-    #     @channel.on("message")
-    #     def on_message(message):
-    #         if isinstance(message, str) and message.startswith("ping"):
-    #             channel.send("pong" + message[4:])
+    @pc.on("datachannel")
+    def on_datachannel(channel):
+        print("Data channel is created!")
+        channel.send("hello")
+        VideoTransformTrack.channel = channel
 
     @pc.on("connectionstatechange")
     async def on_connectionstatechange():
         print("Connection state is %s", pc.connectionState)
         if pc.connectionState == "failed":
             await pc.close()
+        elif pc.connectionState == "connected":
+            pc.createDataChannel("data")
 
     @pc.on("track")
     def on_track(track):
         print("Track %s received", track.kind)
         if track.kind == "video":
-            pc.addTrack(VideoTransformTrack(relay.subscribe(track), channel))
+            pc.addTrack(VideoTransformTrack(relay.subscribe(track)))
 
         @track.on("ended")
         async def on_ended():
