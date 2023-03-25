@@ -9,7 +9,7 @@ counter = 0
 start_time = datetime.datetime.now()
 
 face_detector = dlib.get_frontal_face_detector()
-eye_landmark_predictor = dlib.shape_predictor("/Users/bavagowripanchadcharasivam/Downloads/shape_predictor_68_face_landmarks.dat")
+eye_landmark_predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
 #to get the middle point of an eye to draw vertical line
 def mid_point(p1, p2):
