@@ -6,6 +6,7 @@ import cv2
 import os
 import pickle
 import warnings
+import datetime
 
 
 # drawing utilities
@@ -21,7 +22,7 @@ with open("randomForest_pose_classifierV1.pkl", "rb") as f:
 holistic = mp.solutions.holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
 # create video capture object
-cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture(0)
     
 def image_frame_model(frame):
     #getting current timestamp from local system

@@ -69,6 +69,7 @@ import aiohttp_cors
 from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaRelay
 from av import VideoFrame
+import optimisedModelImp
 
 relay = MediaRelay()
 
@@ -98,21 +99,24 @@ class VideoTransformTrack(MediaStreamTrack):
         # Use to_rgb() function of VideoFrame object to avoid color conversion step
         image = frame.to_rgb().to_ndarray()
 
-        # Use FaceMesh object initialized outside of recv function
-        results = face_mesh.process(image)
+        result_dict = optimisedModelImp.image_frame_model(image)
+        print(result_dict['posture_class'])
 
-        # Draw the face mesh annotations on the image.
-        if results.multi_face_landmarks:
-            for face_landmarks in results.multi_face_landmarks:
-                mp_drawing.draw_landmarks(
-                    image=image,
-                    landmark_list=face_landmarks,
-                    connections=mp_face_mesh.FACEMESH_TESSELATION,
-                    landmark_drawing_spec=None,
-                    connection_drawing_spec=mp_drawing_styles
-                    .get_default_face_mesh_tesselation_style())
+        # # Use FaceMesh object initialized outside of recv function
+        # results = face_mesh.process(image)
 
-        new_frame = VideoFrame.from_ndarray(image, format="rgb24")
+        # # Draw the face mesh annotations on the image.
+        # if results.multi_face_landmarks:
+        #     for face_landmarks in results.multi_face_landmarks:
+        #         mp_drawing.draw_landmarks(
+        #             image=image,
+        #             landmark_list=face_landmarks,
+        #             connections=mp_face_mesh.FACEMESH_TESSELATION,
+        #             landmark_drawing_spec=None,
+        #             connection_drawing_spec=mp_drawing_styles
+        #             .get_default_face_mesh_tesselation_style())
+
+        new_frame = VideoFrame.from_ndarray(result_dict['image_frame'], format="rgb24")
         new_frame.pts = frame.pts
         new_frame.time_base = frame.time_base
         return new_frame
