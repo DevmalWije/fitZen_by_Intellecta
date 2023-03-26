@@ -1,43 +1,62 @@
+import 'package:fitzen_frontend/constants.dart';
 import 'package:flutter/material.dart';
-class CustomizedTextfield extends StatelessWidget {
+
+class CustomizedTextField extends StatefulWidget {
   final TextEditingController myController;
   final String? hintText;
-  final bool? isPassword;
-  const CustomizedTextfield({super.key, required this.myController, this.hintText, this.isPassword});
+  final bool isPassword;
+
+  const CustomizedTextField(
+      {super.key, required this.myController, this.hintText, this.isPassword = false});
+
+  @override
+  State<CustomizedTextField> createState() => _CustomizedTextFieldState();
+}
+
+class _CustomizedTextFieldState extends State<CustomizedTextField> {
+  bool passwordVisible = false;
+
+  @override
+  void initState() {
+    passwordVisible = widget.isPassword;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextField(
-                  keyboardType: isPassword!? TextInputType.visiblePassword : TextInputType.emailAddress,
-                  enableSuggestions: isPassword!? false:true,
-                  autocorrect: isPassword!? false:true,
-                  obscureText: isPassword??true,
-                  controller: myController,
-
-                  
-                  decoration: InputDecoration(
-                    suffixIcon:isPassword! ? IconButton(
-                      icon:const Icon(Icons.remove_red_eye,color: Colors.grey,),
-                    onPressed: (){},
-                    )
-                    :null,
-                    enabledBorder:  OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xffe8ecf4), width: 1),
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    focusedBorder:  OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xffe8ecf4), width: 1),
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    fillColor: const Color(0xffe8ecf4),
-                    filled: true,
-                    hintText: hintText,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10),),
-                  ),
-                ),
-              );
-
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: TextField(
+        obscureText: passwordVisible,
+        controller: widget.myController,
+        decoration: InputDecoration(
+          suffixIcon: widget.isPassword
+              ? MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        passwordVisible = !passwordVisible;
+                      });
+                    },
+                    child: Icon(!passwordVisible ? Icons.visibility : Icons.visibility_off)),
+              )
+              : null,
+          contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+          enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color(0xffe8ecf4), width: 1),
+              borderRadius: BorderRadius.circular(10)),
+          focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color(0xffe8ecf4), width: 1),
+              borderRadius: BorderRadius.circular(10)),
+          fillColor: const Color(0xffe8ecf4),
+          filled: true,
+          labelText: widget.hintText,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      ),
+    );
   }
 }
