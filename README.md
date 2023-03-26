@@ -1,36 +1,48 @@
-FitZen - A Posture Monitoring System
+# FitZen - A Posture Monitoring System
+
 FitZen is a posture monitoring system that uses computer vision to track the user's posture and provide real-time feedback to improve their posture. This project was developed as part of the Software Development Group Project module at IIT.
 
-Requirements
+# Requirements
+
 Python 3.7+
 OpenCV
 dlib
 imutils
 Numpy
-Getting Started
-Installation
-Clone the repository to your local machine.
 
-Install the required packages using pip:
+To run and/or experiment on backend side, the following dependancies
+should be installed, ideally creat a Virtual environment and use command "pip install <module-name>"
+in the terminal, always check if you have already installed them using the command "pip list"
 
-Copy code
-pip install -r requirements.txt
-Running the Program
-Open a terminal or command prompt window in the project directory.
+Mediapipe,
+OpenCV,
+panda,
+Pickle,
+Pillow,
+tensorflow,
+Keras
 
-Run the fitzen.py file:
+# Installation
 
-Copy code
-python fitzen.py
-This will start the posture monitoring system.
+1. Clone the repository
+2. Install the required dependencies
+   pip install -r requirements.txt
 
-Output
+# Usage
+
+1. Run the main.py file
+
+# Output
+
 The program will output the detected posture class and the timestamp of detection to a text file called posture.txt in the project directory. The file can be read and processed to obtain information on the user's posture over time.
 
-Acknowledgments
+# Authors
+
 This project was developed by the following members of the SDGP group:
 
-John Doe
-Jane Doe
-Bob Smith
-We would like to thank our supervisor, Prof. X, for his guidance and support throughout the project.
+- W.G. Dulaj Nadawa 20200539/18669732
+- P. Bavagowri 20210719/19128850
+- D. A. Wijesinghe 20210220/19128599
+- W.M.D.S.B. Weerasooriya 20211512/19046134
+- T. G. M. N. Perera 20210101/18670031
+
