@@ -95,12 +95,13 @@ class VideoTransformTrack(MediaStreamTrack):
     async def recv(self):
         frame = await self.track.recv()
 
-        VideoTransformTrack.channel.send("ggg")
+        
         # Use to_rgb() function of VideoFrame object to avoid color conversion step
         image = frame.to_rgb().to_ndarray()
 
         result_dict = optimisedModelImp.image_frame_model(image)
         print(result_dict['posture_class'])
+        # VideoTransformTrack.channel.send(result_dict['posture_class'])
 
         # # Use FaceMesh object initialized outside of recv function
         # results = face_mesh.process(image)
