@@ -7,6 +7,5 @@ final Color kGreen = Color(0xff03A945);
 final Color kPurple = Color(0xff773CF5);
 final Color kBackgroundColor = Color(0xffffffff);
 
-const firebaseAPIKey = "AIzaSyD14_eEYAhO1DRsBx0eS9V1dMDEHqZEETg";
 const API = "http://localhost:3000/offer";
 // const API = "'http://143.198.80.241:3000/offer'";

@@ -4,6 +4,7 @@ import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/controllers/user_controller.dart';
 import 'package:fitzen_frontend/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
@@ -21,7 +22,8 @@ Future<void> main() async {
     await windowManager.setMaximizable(false);
     await windowManager.focus();
   });
-  FirebaseAuth.initialize(firebaseAPIKey, VolatileStore());
+  await dotenv.load(fileName: ".env");
+  FirebaseAuth.initialize(dotenv.env['FIREBASE_API_KEY']!, VolatileStore());
   runApp(FitZen());
 }
 

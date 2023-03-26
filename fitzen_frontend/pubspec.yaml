@@ -42,6 +42,7 @@ dependencies:
   firedart: ^0.9.0+1
   provider: ^6.0.5
   shared_preferences: ^2.0.20
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -68,7 +69,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-  #   - images/a_dot_ham.jpeg
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

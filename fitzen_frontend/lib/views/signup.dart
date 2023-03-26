@@ -106,7 +106,10 @@ class _SignUpState extends State<SignUp> {
                                   await Provider.of<UserController>(context, listen: false)
                                       .signUp(email, password, onError: (e) {
                                 ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(content: Text(e.toString())));
+                                    .showSnackBar(SnackBar(
+                                  content: Text(e.toString()),
+                                  backgroundColor: Colors.red,
+                                ));
                               });
                               setState(() {
                                 isLoading = false;

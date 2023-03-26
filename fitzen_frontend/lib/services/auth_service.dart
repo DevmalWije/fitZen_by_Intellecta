@@ -19,6 +19,19 @@ class AuthService{
     }
   }
 
+  Future<User?> signIn(String email, String password, {required Function onError}) async {
+    try {
+      User user = await auth.signIn(email, password);
+      return user;
+    } on AuthException catch (e) {
+      onError(e);
+      return null;
+    } catch(e){
+      onError(e);
+      return null;
+    }
+  }
+
   Future<String> getIDToken() async {
     return await auth.tokenProvider.idToken;
   }

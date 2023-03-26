@@ -1,9 +1,13 @@
 import 'package:fitzen_frontend/constants.dart';
+import 'package:fitzen_frontend/controllers/user_controller.dart';
 import 'package:fitzen_frontend/views/signup.dart';
 import 'package:fitzen_frontend/widgets/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fitzen_frontend/widgets/customized_textField.dart';
+import 'package:provider/provider.dart';
+
+import 'home.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -15,6 +19,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +77,39 @@ class _LoginState extends State<Login> {
                       child: Button(
                         backgroundColor: kBlue,
                         text: "Login",
+                        isLoading: isLoading,
                         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                        onPressed: () {},
+                        onPressed: () async {
+                          String email = _emailController.text.trim();
+                          String password = _passwordController.text.trim();
+
+                          if (email.isEmpty || password.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Please fill all the fields!"),
+                              backgroundColor: Colors.red,
+                            ));
+                          } else {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            bool isSuccess =
+                                await Provider.of<UserController>(context, listen: false)
+                                    .signIn(email, password, onError: (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(e.toString()),
+                                backgroundColor: Colors.red,
+                              ));
+                            });
+                            setState(() {
+                              isLoading = false;
+                            });
+                            if (isSuccess) {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  CupertinoPageRoute(builder: (context) => Home()),
+                                  (Route<dynamic> route) => false);
+                            }
+                          }
+                        },
                       ),
                     ),
 

@@ -17,6 +17,18 @@ class UserController {
     return user != null;
   }
 
+  Future<bool> signIn(String email, String password, {required Function onError}) async {
+    User? user = await _authService.signIn(email, password, onError: onError);
+    if(user != null){
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('uid', user.id);
+      String idToken = await _authService.getIDToken();
+      preferences.setString('idToken', idToken);
+    }
+
+    return user != null;
+  }
+
   Future<bool> isUserSignedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? idToken = prefs.getString("idToken");
