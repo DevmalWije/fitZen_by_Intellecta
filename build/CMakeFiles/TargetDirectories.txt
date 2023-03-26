@@ -1,0 +1,10 @@
+D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/CMakeFiles/INSTALL.dir
+D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/CMakeFiles/ALL_BUILD.dir
+D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/CMakeFiles/ZERO_CHECK.dir
+D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/flutter/CMakeFiles/flutter_wrapper_plugin.dir
+D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/flutter/CMakeFiles/flutter_wrapper_app.dir
+D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/flutter/CMakeFiles/flutter_assemble.dir
+D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/flutter/CMakeFiles/INSTALL.dir
+D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/runner/CMakeFiles/fitzen_frontend.dir
+D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/runner/CMakeFiles/INSTALL.dir
+D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/runner/CMakeFiles/ALL_BUILD.dir

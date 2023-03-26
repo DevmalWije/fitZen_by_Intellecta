@@ -1,0 +1,28 @@
+^D:\IIT COURSWORK\L-5-SE-2023\5COSC021C.2 SOFTWARE DEVELOPMENT GROUP PROJECT\SDGP GROUP-WORK\FITZEN_BY_INTELLECTA\BUILD\CMAKEFILES\988BFAA11B41096B11D2BEB635EF8246\FLUTTER_WINDOWS.DLL.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E env FLUTTER_ROOT=D:\src\flutter "PROJECT_DIR=D:\IIT courswork\L-5-SE-2023\5COSC021C.2 Software Development Group Project\SDGP group-work\fitZen_by_Intellecta\fitzen_frontend" FLUTTER_ROOT=D:\src\flutter "FLUTTER_EPHEMERAL_DIR=D:\IIT courswork\L-5-SE-2023\5COSC021C.2 Software Development Group Project\SDGP group-work\fitZen_by_Intellecta\fitzen_frontend\windows\flutter\ephemeral" "PROJECT_DIR=D:\IIT courswork\L-5-SE-2023\5COSC021C.2 Software Development Group Project\SDGP group-work\fitZen_by_Intellecta\fitzen_frontend" "FLUTTER_TARGET=D:\IIT courswork\L-5-SE-2023\5COSC021C.2 Software Development Group Project\SDGP group-work\fitZen_by_Intellecta\fitzen_frontend\lib\main.dart" DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ== DART_OBFUSCATION=false TRACK_WIDGET_CREATION=true TREE_SHAKE_ICONS=false "PACKAGE_CONFIG=D:\IIT courswork\L-5-SE-2023\5COSC021C.2 Software Development Group Project\SDGP group-work\fitZen_by_Intellecta\fitzen_frontend\.dart_tool\package_config.json" D:/src/flutter/packages/flutter_tools/bin/tool_backend.bat windows-x64 Debug
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\IIT COURSWORK\L-5-SE-2023\5COSC021C.2 SOFTWARE DEVELOPMENT GROUP PROJECT\SDGP GROUP-WORK\FITZEN_BY_INTELLECTA\BUILD\CMAKEFILES\EC409CA28FBCE00178FD3EDB399328FC\FLUTTER_ASSEMBLE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\IIT COURSWORK\L-5-SE-2023\5COSC021C.2 SOFTWARE DEVELOPMENT GROUP PROJECT\SDGP GROUP-WORK\FITZEN_BY_INTELLECTA\FITZEN_FRONTEND\WINDOWS\FLUTTER\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SD:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/fitzen_frontend/windows" "-BD:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build" --check-stamp-file "D:/IIT courswork/L-5-SE-2023/5COSC021C.2 Software Development Group Project/SDGP group-work/fitZen_by_Intellecta/build/flutter/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

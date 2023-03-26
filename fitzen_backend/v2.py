@@ -31,13 +31,13 @@ with mp_face_mesh.FaceMesh(
         if results.multi_face_landmarks:
             for face_landmarks in results.multi_face_landmarks:
                 
-                mp_drawing.draw_landmarks(
-                    image=image,
-                    landmark_list=face_landmarks,
-                    connections=mp_face_mesh.FACEMESH_TESSELATION,
-                    landmark_drawing_spec=None,
-                    connection_drawing_spec=mp_drawing_styles
-                    .get_default_face_mesh_tesselation_style())
+                # mp_drawing.draw_landmarks(
+                #     image=image,
+                #     landmark_list=face_landmarks,
+                #     connections=mp_face_mesh.FACEMESH_TESSELATION,
+                #     landmark_drawing_spec=None,
+                #     connection_drawing_spec=mp_drawing_styles
+                #     .get_default_face_mesh_tesselation_style())
                 # mp_drawing.draw_landmarks(
                 #     image=image,
                 #     landmark_list=face_landmarks,
@@ -45,13 +45,13 @@ with mp_face_mesh.FaceMesh(
                 #     landmark_drawing_spec=None,
                 #     connection_drawing_spec=mp_drawing_styles
                 #     .get_default_face_mesh_contours_style())
-                # mp_drawing.draw_landmarks(
-                #     image=image,
-                #     landmark_list=face_landmarks,
-                #     connections=mp_face_mesh.FACEMESH_IRISES,
-                #     landmark_drawing_spec=None,
-                #     connection_drawing_spec=mp_drawing_styles
-                #     .get_default_face_mesh_iris_connections_style())
+                mp_drawing.draw_landmarks(
+                    image=image,
+                    landmark_list=face_landmarks,
+                    connections=mp_face_mesh.FACEMESH_IRISES,
+                    landmark_drawing_spec=None,
+                    connection_drawing_spec=mp_drawing_styles
+                    .get_default_face_mesh_iris_connections_style())
                 
                 
                 
