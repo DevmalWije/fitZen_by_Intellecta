@@ -1,11 +1,11 @@
+import 'package:firedart/auth/firebase_auth.dart';
+import 'package:firedart/auth/token_store.dart';
 import 'package:fitzen_frontend/constants.dart';
-import 'package:fitzen_frontend/views/login.dart';
-import 'package:fitzen_frontend/views/signup.dart';
-import 'package:fitzen_frontend/views/home.dart';
-import 'package:fitzen_frontend/views/settings.dart';
-import 'package:fitzen_frontend/views/tracking_screen.dart';
+import 'package:fitzen_frontend/controllers/user_controller.dart';
+import 'package:fitzen_frontend/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
@@ -21,6 +21,7 @@ Future<void> main() async {
     await windowManager.setMaximizable(false);
     await windowManager.focus();
   });
+  FirebaseAuth.initialize(firebaseAPIKey, VolatileStore());
   runApp(FitZen());
 }
 
@@ -29,37 +30,42 @@ class FitZen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: kBackgroundColor,
-        primaryColor: kBlue,
-        textTheme: GoogleFonts.dmSansTextTheme(
-          TextTheme(
-            headline1: TextStyle(
-              fontSize: 50,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-            headline2: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.w700,
-              color: Color(0xff505050),
-            ),
-            caption: TextStyle(
-              fontSize: 24,
-              color: Colors.white,
-              fontWeight: FontWeight.w400,
-            ),
-            button: TextStyle(
-              fontSize: 22,
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
+    return MultiProvider(
+      providers: [
+        Provider<UserController>(create: (_) => UserController()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          scaffoldBackgroundColor: kBackgroundColor,
+          primaryColor: kBlue,
+          textTheme: GoogleFonts.dmSansTextTheme(
+            TextTheme(
+              headline1: TextStyle(
+                fontSize: 50,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+              headline2: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.w700,
+                color: Color(0xff505050),
+              ),
+              caption: TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+                fontWeight: FontWeight.w400,
+              ),
+              button: TextStyle(
+                fontSize: 22,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),
+        home: Wrapper(),
       ),
-      home: Login(),
     );
   }
 }

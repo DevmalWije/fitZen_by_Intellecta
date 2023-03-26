@@ -1,7 +1,11 @@
 import 'package:fitzen_frontend/constants.dart';
+import 'package:fitzen_frontend/controllers/user_controller.dart';
+import 'package:fitzen_frontend/views/login.dart';
 import 'package:fitzen_frontend/widgets/summary_card.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/button.dart';
 
@@ -71,16 +75,28 @@ class _HomeState extends State<Home> {
             //app bar
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image.asset(
                   "assets/logo.png",
                   height: 90,
                 ),
+                Expanded(child: SizedBox.shrink()),
                 IconButton(
                   onPressed: () {},
                   icon: Icon(
                     Icons.settings,
+                    size: 30,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    await Provider.of<UserController>(context, listen: false).signOut();
+                    Navigator.of(context).pushAndRemoveUntil(
+                        CupertinoPageRoute(builder: (context) => Login()),
+                            (Route<dynamic> route) => false);
+                  },
+                  icon: Icon(
+                    Icons.logout,
                     size: 30,
                   ),
                 ),

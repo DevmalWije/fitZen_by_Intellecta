@@ -1,7 +1,11 @@
+import 'package:fitzen_frontend/controllers/user_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fitzen_frontend/widgets/customized_textField.dart';
 import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/widgets/button.dart';
+import 'package:provider/provider.dart';
+import 'package:fitzen_frontend/views/home.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -12,9 +16,9 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _usernameContoller = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +60,6 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ),
                       CustomizedTextField(
-                        myController: _usernameContoller,
-                        hintText: "Enter Username",
-                        isPassword: false,
-                      ),
-                      CustomizedTextField(
                         myController: _emailController,
                         hintText: "Enter Email",
                         isPassword: false,
@@ -82,8 +81,43 @@ class _SignUpState extends State<SignUp> {
                         child: Button(
                           backgroundColor: kBlue,
                           text: "Signup",
+                          isLoading: isLoading,
                           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                          onPressed: () {},
+                          onPressed: () async {
+                            String email = _emailController.text.trim();
+                            String password = _passwordController.text.trim();
+                            String confirmPassword = _confirmPasswordController.text.trim();
+
+                            if (email.isEmpty ||
+                                password.trim().isEmpty ||
+                                confirmPassword.trim().isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text("Please fill all the fields!"),
+                                  backgroundColor: Colors.red));
+                            } else if (password.trim() != confirmPassword.trim()) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text("Passwords does not match!"),
+                                  backgroundColor: Colors.red));
+                            } else {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              bool isSuccess =
+                                  await Provider.of<UserController>(context, listen: false)
+                                      .signUp(email, password, onError: (e) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(content: Text(e.toString())));
+                              });
+                              setState(() {
+                                isLoading = false;
+                              });
+                              if (isSuccess) {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    CupertinoPageRoute(builder: (context) => Home()),
+                                    (Route<dynamic> route) => false);
+                              }
+                            }
+                          },
                         ),
                       ),
 
