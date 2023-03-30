@@ -70,6 +70,8 @@ from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaRelay
 from av import VideoFrame
 import optimisedModelImp
+import multiThreadingVersion
+import asyncio
 
 relay = MediaRelay()
 
@@ -94,13 +96,14 @@ class VideoTransformTrack(MediaStreamTrack):
 
     async def recv(self):
         frame = await self.track.recv()
-
+        return frame
         
         # Use to_rgb() function of VideoFrame object to avoid color conversion step
         image = frame.to_rgb().to_ndarray()
 
-        result_dict = optimisedModelImp.image_frame_model(image)
-        print(result_dict['posture_class'])
+        # result_dict = optimisedModelImp.image_frame_model(image)
+        # dict = await multiThreadingVersion.image_frame_model(image)
+        # print(dict['posture_class'])
         # VideoTransformTrack.channel.send(result_dict['posture_class'])
 
         # # Use FaceMesh object initialized outside of recv function
@@ -117,7 +120,7 @@ class VideoTransformTrack(MediaStreamTrack):
         #             connection_drawing_spec=mp_drawing_styles
         #             .get_default_face_mesh_tesselation_style())
 
-        new_frame = VideoFrame.from_ndarray(result_dict['image_frame'], format="rgb24")
+        new_frame = VideoFrame.from_ndarray(dict['image_frame'], format="rgb24")
         new_frame.pts = frame.pts
         new_frame.time_base = frame.time_base
         return new_frame

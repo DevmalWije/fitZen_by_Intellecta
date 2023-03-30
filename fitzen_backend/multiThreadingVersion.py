@@ -70,7 +70,8 @@ async def image_frame_model(frame):
         # writing posture class and detected time to text file
         with open("posture.txt", "a") as f:
             f.write(f"{pose_language_class},{datetime.datetime.now()}\n")
-    except:
+    except Exception as e:
+        print(e)
         pose_language_class = "no pose detected"
         pass
 
