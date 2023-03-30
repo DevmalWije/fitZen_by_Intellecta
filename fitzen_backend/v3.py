@@ -1,3 +1,4 @@
+import time
 import cv2
 import mediapipe as mp
 mp_drawing = mp.solutions.drawing_utils
@@ -96,14 +97,17 @@ class VideoTransformTrack(MediaStreamTrack):
 
     async def recv(self):
         frame = await self.track.recv()
-        return frame
         
         # Use to_rgb() function of VideoFrame object to avoid color conversion step
         image = frame.to_rgb().to_ndarray()
 
         # result_dict = optimisedModelImp.image_frame_model(image)
-        # dict = await multiThreadingVersion.image_frame_model(image)
-        # print(dict['posture_class'])
+        print("Called 1")
+        start_time = time.time() # start the timer
+        dict = await multiThreadingVersion.image_frame_model(image)
+        end_time = time.time()
+        print("Elapsed time: {:.2f} seconds".format(end_time - start_time))
+        print(dict['posture_class'])
         # VideoTransformTrack.channel.send(result_dict['posture_class'])
 
         # # Use FaceMesh object initialized outside of recv function
