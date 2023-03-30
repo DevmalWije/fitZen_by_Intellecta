@@ -7,12 +7,11 @@ while cap.isOpened():
 
     s, frame = cap.read()
     dict = optimisedModelImp.image_frame_model(frame)
-    print(dict['posture_class'])
 
     cv2.imshow('g', dict['image_frame'])
-    if cv2.waitKey(1) == 25:
-        break
 
+    if cv2.waitKey(10) & 0xFF == ord('q'):
+        break
 
 cap.release()
 cv2.destroyAllWindows()
