@@ -108,7 +108,7 @@ class VideoTransformTrack(MediaStreamTrack):
         end_time = time.time()
         print("Elapsed time: {:.2f} seconds".format(end_time - start_time))
         print(dict['posture_class'])
-        # VideoTransformTrack.channel.send(dict['posture_class'])
+        VideoTransformTrack.channel.send(dict['posture_class'])
 
         # # Use FaceMesh object initialized outside of recv function
         # results = face_mesh.process(image)
@@ -141,7 +141,6 @@ async def offer(request):
     @pc.on("datachannel")
     def on_datachannel(channel):
         print("Data channel is created!")
-        channel.send("hello")
         VideoTransformTrack.channel = channel
 
     @pc.on("connectionstatechange")
