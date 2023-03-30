@@ -39,17 +39,18 @@ class _TrackingScreenState extends State<TrackingScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 40),
-        child: Column(
-          children: [
-            //camera view and status
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  //camera view
-                  Expanded(
-                    flex: 2,
-                    child: Card(
+        child: SizedBox(
+          height: double.infinity,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    //camera view
+                    Expanded(
+                      flex: 2,
+                      child: Card(
                         color: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -63,137 +64,130 @@ class _TrackingScreenState extends State<TrackingScreen> {
 
                             return SizedBox.shrink();
                           },
-                        )),
-                  ),
-                  SizedBox(width: 45),
-
-                  //status cards
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SummaryCard(
-                          title: "Current Posture",
-                          value: trackingController.posture,
-                          color: kGreen,
-                          padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
                         ),
-                        SizedBox(height: 10),
-                        SummaryCard(
-                          title: "Current Eye Health",
-                          value: "Bad",
-                          color: kRed,
-                          padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
-                        ),
-                        SizedBox(height: 10),
-                        SummaryCard(
-                          title: "Current Screen Time",
-                          value: "02:15:12",
-                          color: kBlue,
-                          padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 30),
-
-            // //camera view and start button
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  //camera view
-                  SizedBox(
-                    height: double.infinity,
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    child: Card(
-                      color: Colors.black.withOpacity(0.11),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Suggestions",
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Color(0xff505050),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            SizedBox(height: 20),
+                    ),
+                    SizedBox(height: 30),
 
-                            //text
-                            Row(
-                              children: [
-                                Image.asset(
-                                  "assets/suggestion.png",
-                                  width: 60,
+                    //suggestions
+                    Expanded(
+                      flex: 1,
+                      child: Card(
+                        color: Colors.black.withOpacity(0.11),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Suggestions",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(0xff505050),
+                                  fontWeight: FontWeight.w700,
                                 ),
-                                SizedBox(width: 30),
-                                Expanded(
+                              ),
+                              SizedBox(height: 20),
+
+                              //text
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/suggestion.png",
+                                    width: 50,
+                                  ),
+                                  SizedBox(width: 30),
+                                  Expanded(
+                                    child: Text(
+                                      "Lorem Ipsum is simply dummy text of the printing and typesetting"
+                                      " industry. Lorem Ipsum has been the industry's standard"
+                                      " dummy text ever since the 1500s,",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        height: 1.4,
+                                        color: Color(0xff505050),
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Expanded(child: SizedBox.shrink()),
+
+                              //button
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: TextButton(
+                                  onPressed: () {},
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: kBlue,
+                                  ),
                                   child: Text(
-                                    "Lorem Ipsum is simply dummy text of the printing and typesetting"
-                                    " industry. Lorem Ipsum has been the industry's standard"
-                                    " dummy text ever since the 1500s,",
+                                    "View All",
                                     style: TextStyle(
-                                      fontSize: 18,
-                                      height: 1.4,
-                                      color: Color(0xff505050),
-                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                            Expanded(child: SizedBox.shrink()),
-
-                            //button
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: TextButton(
-                                onPressed: () {},
-                                style: TextButton.styleFrom(
-                                  foregroundColor: kBlue,
-                                ),
-                                child: Text("View All"),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 150),
-
-                  //stop button
-                  Button(
-                    text: "Stop Tracking",
-                    icon: Icons.timer_outlined,
-                    isLoading: trackingController.isLoading,
-                    backgroundColor: kRed,
-                    onPressed: () {
-                      if (trackingController.isStarted) {
-                        trackingController.stopConnection();
-                        Navigator.of(context).pushAndRemoveUntil(
-                            CupertinoPageRoute(builder: (context) => Home()),
-                            (Route<dynamic> route) => false);
-                      }
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+              SizedBox(width: 30),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SummaryCard(
+                      title: "Current Posture",
+                      value: trackingController.posture,
+                      color: kGreen,
+                      padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
+                    ),
+                    SizedBox(height: 10),
+                    SummaryCard(
+                      title: "Current Eye Health",
+                      value: "Bad",
+                      color: kRed,
+                      padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
+                    ),
+                    SizedBox(height: 10),
+                    SummaryCard(
+                      title: "Current Screen Time",
+                      value: "02:15:12",
+                      color: kBlue,
+                      padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
+                    ),
+                    Expanded(child: SizedBox.shrink()),
+                    Button(
+                      text: "Stop Tracking",
+                      icon: Icons.timer_outlined,
+                      isLoading: trackingController.isLoading,
+                      backgroundColor: kRed,
+                      onPressed: () {
+                        if (trackingController.isStarted) {
+                          trackingController.stopConnection();
+                          Navigator.of(context).pushAndRemoveUntil(
+                              CupertinoPageRoute(builder: (context) => Home()),
+                              (Route<dynamic> route) => false);
+                        }
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
