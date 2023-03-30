@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:fitzen_frontend/constants.dart';
@@ -20,6 +21,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
   final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   RTCDataChannel? _dataChannel;
   RTCDataChannelInit? _dataChannelDict;
+  String posture = "N/A";
 
   void _onDataChannelState(RTCDataChannelState? state) {
     switch (state) {
@@ -89,7 +91,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
 
   void _onTrack(RTCTrackEvent event) {
     if (event.track.kind == "video") {
-      _localRenderer.srcObject = event.streams[0];
+      // _localRenderer.srcObject = event.streams[0];
     }
   }
 
@@ -115,6 +117,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
     );
     _dataChannel!.onDataChannelState = _onDataChannelState;
     _dataChannel!.onMessage = (RTCDataChannelMessage message){
+      setState(() {
+        posture = message.text;
+      });
       print('Data channel message received: ${message.text}');
     };
 
@@ -122,9 +127,10 @@ class _TrackingScreenState extends State<TrackingScreen> {
       'audio': false,
       'video': {
         'mandatory': {
-          'minWidth': '700',
-          'minHeight': '700',
-          'minFrameRate': '5',
+          'minWidth': '800',
+          'minHeight': '800',
+          'minFrameRate': '1',
+          'maxFrameRate': '1',
         },
         'facingMode': 'user',
         // 'facingMode': 'environment',
@@ -135,9 +141,21 @@ class _TrackingScreenState extends State<TrackingScreen> {
     try {
       var stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
       _localStream = stream;
-
+      _localRenderer.srcObject = _localStream;
       stream.getTracks().forEach((element) {
         _peerConnection!.addTrack(element, stream);
+      });
+
+      Timer.periodic(Duration(seconds: 20), (timer) async {
+        final transceivers = await _peerConnection!.getTransceivers();
+        RTCRtpTransceiver videoTransceiver = transceivers.firstWhere(
+              (transceiver) => transceiver.sender.track?.kind == 'video',
+        );
+        final videoSender = videoTransceiver.sender;
+        videoSender.replaceTrack(null);
+        await Future.delayed(Duration(milliseconds: 100));
+        final userVideoTrack = stream.getVideoTracks()[0];
+        videoSender.replaceTrack(userVideoTrack);
       });
 
       await _negotiateRemoteConnection();
@@ -197,7 +215,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                       children: [
                         SummaryCard(
                           title: "Current Posture",
-                          value: "Good",
+                          value: posture,
                           color: kGreen,
                           padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
                         ),
