@@ -122,9 +122,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
       'audio': false,
       'video': {
         'mandatory': {
-          'minWidth': '500',
-          'minHeight': '500',
-          'minFrameRate': '30',
+          'minWidth': '700',
+          'minHeight': '700',
+          'minFrameRate': '5',
         },
         'facingMode': 'user',
         // 'facingMode': 'environment',

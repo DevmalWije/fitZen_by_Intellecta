@@ -2,6 +2,7 @@ import 'package:firedart/auth/firebase_auth.dart';
 import 'package:firedart/auth/token_store.dart';
 import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/controllers/user_controller.dart';
+import 'package:fitzen_frontend/views/tracking_screen.dart';
 import 'package:fitzen_frontend/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -66,7 +67,7 @@ class FitZen extends StatelessWidget {
             ),
           ),
         ),
-        home: Wrapper(),
+        home: TrackingScreen(),
       ),
     );
   }
