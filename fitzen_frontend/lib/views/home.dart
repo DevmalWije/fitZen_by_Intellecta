@@ -1,6 +1,7 @@
 import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/controllers/user_controller.dart';
 import 'package:fitzen_frontend/views/login.dart';
+import 'package:fitzen_frontend/views/tracking_screen.dart';
 import 'package:fitzen_frontend/widgets/summary_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -182,7 +183,14 @@ class _HomeState extends State<Home> {
                     text: "Start Tracking",
                     icon: Icons.timer_outlined,
                     backgroundColor: kGreen,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (_) => TrackingScreen(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

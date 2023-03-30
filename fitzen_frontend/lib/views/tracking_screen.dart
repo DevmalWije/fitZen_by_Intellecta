@@ -1,12 +1,12 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:fitzen_frontend/constants.dart';
+import 'package:fitzen_frontend/controllers/tracking_controller.dart';
+import 'package:fitzen_frontend/views/home.dart';
 import 'package:fitzen_frontend/widgets/summary_card.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:http/http.dart' as http;
-import '../widgets/button.dart';
+import 'package:fitzen_frontend/widgets/button.dart';
+import 'package:provider/provider.dart';
 
 class TrackingScreen extends StatefulWidget {
   const TrackingScreen({Key? key}) : super(key: key);
@@ -16,169 +16,26 @@ class TrackingScreen extends StatefulWidget {
 }
 
 class _TrackingScreenState extends State<TrackingScreen> {
-  RTCPeerConnection? _peerConnection;
-  MediaStream? _localStream;
-  final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
-  RTCDataChannel? _dataChannel;
-  RTCDataChannelInit? _dataChannelDict;
-  String posture = "N/A";
-
-  void _onDataChannelState(RTCDataChannelState? state) {
-    switch (state) {
-      case RTCDataChannelState.RTCDataChannelClosed:
-        print("channel Closed!!!!!!!");
-        break;
-      case RTCDataChannelState.RTCDataChannelOpen:
-        print("channel Opened!!!!!!!");
-        break;
-      default:
-        print("Data Channel State: $state");
-    }
-  }
-
-  Future<bool> _waitForGatheringComplete(_) async {
-    print("WAITING FOR GATHERING COMPLETE");
-    if (_peerConnection!.iceGatheringState ==
-        RTCIceGatheringState.RTCIceGatheringStateComplete) {
-      return true;
-    } else {
-      await Future.delayed(Duration(seconds: 1));
-      return await _waitForGatheringComplete(_);
-    }
-  }
-
-  Future<void> _negotiateRemoteConnection() async {
-    return _peerConnection!
-        .createOffer()
-        .then((offer) {
-      return _peerConnection!.setLocalDescription(offer);
-    })
-        .then(_waitForGatheringComplete)
-        .then((_) async {
-      var des = await _peerConnection!.getLocalDescription();
-      var headers = {
-        'Content-Type': 'application/json',
-      };
-      var request = http.Request(
-        'POST',
-        Uri.parse(API),
-      );
-      request.body = json.encode(
-        {
-          "sdp": des!.sdp,
-          "type": des.type,
-        },
-      );
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-
-      String data = "";
-      if (response.statusCode == 200) {
-        data = await response.stream.bytesToString();
-        var dataMap = json.decode(data);
-        await _peerConnection!.setRemoteDescription(
-          RTCSessionDescription(
-            dataMap["sdp"],
-            dataMap["type"],
-          ),
-        );
-      } else {
-        print(response.reasonPhrase);
-      }
-    });
-  }
-
-  void _onTrack(RTCTrackEvent event) {
-    if (event.track.kind == "video") {
-      // _localRenderer.srcObject = event.streams[0];
-    }
-  }
-
-  Future<void> createConnection() async {
-    // setState(() {
-    //   _loading = true;
-    // });
-
-    //* Create Peer Connection
-    if (_peerConnection != null) return;
-    _peerConnection = await createPeerConnection({
-      'sdpSemantics': 'unified-plan',
-    });
-
-    _peerConnection!.onTrack = _onTrack;
-
-    //* Create Data Channel
-    _dataChannelDict = RTCDataChannelInit();
-    _dataChannelDict!.ordered = true;
-    _dataChannel = await _peerConnection!.createDataChannel(
-      "data",
-      _dataChannelDict!,
-    );
-    _dataChannel!.onDataChannelState = _onDataChannelState;
-    _dataChannel!.onMessage = (RTCDataChannelMessage message){
-      setState(() {
-        posture = message.text;
-      });
-      print('Data channel message received: ${message.text}');
-    };
-
-    final mediaConstraints = <String, dynamic>{
-      'audio': false,
-      'video': {
-        'mandatory': {
-          'minWidth': '800',
-          'minHeight': '800',
-          'minFrameRate': '1',
-          'maxFrameRate': '1',
-        },
-        'facingMode': 'user',
-        // 'facingMode': 'environment',
-        'optional': [],
-      }
-    };
-
-    try {
-      var stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-      _localStream = stream;
-      _localRenderer.srcObject = _localStream;
-      stream.getTracks().forEach((element) {
-        _peerConnection!.addTrack(element, stream);
-      });
-
-      Timer.periodic(Duration(seconds: 20), (timer) async {
-        final transceivers = await _peerConnection!.getTransceivers();
-        RTCRtpTransceiver videoTransceiver = transceivers.firstWhere(
-              (transceiver) => transceiver.sender.track?.kind == 'video',
-        );
-        final videoSender = videoTransceiver.sender;
-        videoSender.replaceTrack(null);
-        await Future.delayed(Duration(milliseconds: 100));
-        final userVideoTrack = stream.getVideoTracks()[0];
-        videoSender.replaceTrack(userVideoTrack);
-      });
-
-      await _negotiateRemoteConnection();
-    } catch (e) {
-      print(e.toString());
-    }
-    if (!mounted) return;
-
-    setState(() {});
-  }
-
-  void initializeRenderer() async {
-    await _localRenderer.initialize();
+  void startTracking() async {
+    await Provider.of<TrackingController>(context, listen: false).initializeRenderer();
+    await Provider.of<TrackingController>(context, listen: false).startConnection();
   }
 
   @override
   void initState() {
     super.initState();
-    initializeRenderer();
+    startTracking();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Provider.of<TrackingController>(context, listen: false).stopConnection();
   }
 
   @override
   Widget build(BuildContext context) {
+    var trackingController = Provider.of<TrackingController>(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 40),
@@ -193,17 +50,20 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   Expanded(
                     flex: 2,
                     child: Card(
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: RTCVideoView(
-                        _localRenderer,
-                        placeholderBuilder: (_) {
-                          return Center(child: CircularProgressIndicator());
-                        },
-                      ),
-                    ),
+                        color: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: RTCVideoView(
+                          trackingController.localRenderer,
+                          placeholderBuilder: (_) {
+                            if (trackingController.isLoading) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+
+                            return SizedBox.shrink();
+                          },
+                        )),
                   ),
                   SizedBox(width: 45),
 
@@ -215,7 +75,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                       children: [
                         SummaryCard(
                           title: "Current Posture",
-                          value: posture,
+                          value: trackingController.posture,
                           color: kGreen,
                           padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
                         ),
@@ -319,8 +179,16 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   Button(
                     text: "Stop Tracking",
                     icon: Icons.timer_outlined,
+                    isLoading: trackingController.isLoading,
                     backgroundColor: kRed,
-                    onPressed: () {createConnection();},
+                    onPressed: () {
+                      if (trackingController.isStarted) {
+                        trackingController.stopConnection();
+                        Navigator.of(context).pushAndRemoveUntil(
+                            CupertinoPageRoute(builder: (context) => Home()),
+                            (Route<dynamic> route) => false);
+                      }
+                    },
                   ),
                 ],
               ),

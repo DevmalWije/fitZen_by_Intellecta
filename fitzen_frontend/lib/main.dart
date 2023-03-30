@@ -1,6 +1,7 @@
 import 'package:firedart/auth/firebase_auth.dart';
 import 'package:firedart/auth/token_store.dart';
 import 'package:fitzen_frontend/constants.dart';
+import 'package:fitzen_frontend/controllers/tracking_controller.dart';
 import 'package:fitzen_frontend/controllers/user_controller.dart';
 import 'package:fitzen_frontend/views/tracking_screen.dart';
 import 'package:fitzen_frontend/wrapper.dart';
@@ -36,6 +37,7 @@ class FitZen extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<UserController>(create: (_) => UserController()),
+        ChangeNotifierProvider<TrackingController>(create: (_) => TrackingController()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -67,7 +69,7 @@ class FitZen extends StatelessWidget {
             ),
           ),
         ),
-        home: TrackingScreen(),
+        home: Wrapper(),
       ),
     );
   }
