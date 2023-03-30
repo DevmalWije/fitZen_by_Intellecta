@@ -1,6 +1,7 @@
 import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/controllers/user_controller.dart';
 import 'package:fitzen_frontend/views/login.dart';
+import 'package:fitzen_frontend/views/settings.dart';
 import 'package:fitzen_frontend/views/tracking_screen.dart';
 import 'package:fitzen_frontend/widgets/summary_card.dart';
 import 'package:flutter/cupertino.dart';
@@ -79,16 +80,24 @@ class _HomeState extends State<Home> {
               children: [
                 Image.asset(
                   "assets/logo.png",
-                  height: 90,
+                  height: 50,
                 ),
                 Expanded(child: SizedBox.shrink()),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => Settings(),
+                      ),
+                    );
+                  },
                   icon: Icon(
                     Icons.settings,
-                    size: 30,
+                    size: 25,
                   ),
                 ),
+                SizedBox(width: 30),
                 IconButton(
                   onPressed: () async {
                     await Provider.of<UserController>(context, listen: false).signOut();
@@ -98,7 +107,8 @@ class _HomeState extends State<Home> {
                   },
                   icon: Icon(
                     Icons.logout,
-                    size: 30,
+                    color: kRed,
+                    size: 25,
                   ),
                 ),
               ],
@@ -118,7 +128,7 @@ class _HomeState extends State<Home> {
                 SizedBox(width: 35),
                 Expanded(
                   child: SummaryCard(
-                    title: "No. of Times in Poor Posture",
+                    title: "Poor Postures",
                     value: "15",
                     color: kRed,
                   ),
@@ -176,7 +186,6 @@ class _HomeState extends State<Home> {
                       ),
                     ],
                   ),
-                  SizedBox(width: 150),
 
                   //start button
                   Button(
