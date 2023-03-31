@@ -14,6 +14,7 @@ while cap.isOpened():
 
     # test for blink detection
     dict = blink_detection.detect_blinks(frame)
+    print(dict["blink_count"], dict["eye_strain_level"])
 
     try:
         cv2.imshow('g', dict['image_frame'])

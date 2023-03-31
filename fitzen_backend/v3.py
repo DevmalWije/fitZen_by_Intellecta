@@ -73,6 +73,7 @@ from av import VideoFrame
 import optimisedModelImp
 import multiThreadingVersion
 import asyncio
+import blink_detection
 
 relay = MediaRelay()
 
@@ -102,14 +103,20 @@ class VideoTransformTrack(MediaStreamTrack):
         image = frame.to_rgb().to_ndarray()
 
         # result_dict = optimisedModelImp.image_frame_model(image)
-        print("Called 1")
         start_time = time.time() # start the timer
         dict = await multiThreadingVersion.image_frame_model(image)
+        blink_dict = blink_detection.detect_blinks(image)
         end_time = time.time()
         print("Elapsed time: {:.2f} seconds".format(end_time - start_time))
         print(dict['posture_class'])
+        print(blink_dict["eye_strain_level"])
+
+
         if VideoTransformTrack.channel != None:
-            VideoTransformTrack.channel.send(dict['posture_class'])
+            VideoTransformTrack.channel.send(json.dumps({
+                'posture': dict['posture_class'],
+                'eye_strain': blink_dict["eye_strain_level"]
+            }))
 
         # # Use FaceMesh object initialized outside of recv function
         # results = face_mesh.process(image)

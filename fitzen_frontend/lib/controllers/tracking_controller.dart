@@ -11,6 +11,7 @@ class TrackingController extends ChangeNotifier {
   bool _isStarted = false;
   bool _isLoading = false;
   String _posture = "N/A";
+  String _eyeHealth = "N/A";
   final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
   RTCPeerConnection? _peerConnection;
   RTCDataChannel? _dataChannel;
@@ -23,6 +24,7 @@ class TrackingController extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   String get posture => _posture;
+  String get eyeHealth => _eyeHealth;
 
   RTCVideoRenderer get localRenderer => _localRenderer;
 
@@ -38,6 +40,11 @@ class TrackingController extends ChangeNotifier {
 
   set posture(String value) {
     _posture = value;
+    notifyListeners();
+  }
+
+  set eyeHealth(String value) {
+    _eyeHealth = value;
     notifyListeners();
   }
 
@@ -103,6 +110,14 @@ class TrackingController extends ChangeNotifier {
         });
   }
 
+  void _onTrack(RTCTrackEvent event) {
+    print("TRACK EVENT: ${event.streams.map((e) => e.id)}, ${event.track.id}");
+    if (event.track.kind == "video") {
+      print("HERE");
+      _localRenderer.srcObject = event.streams[0];
+    }
+  }
+
   Future<void> startConnection(BuildContext context) async {
     isLoading = true;
     //* Create Peer Connection
@@ -110,6 +125,8 @@ class TrackingController extends ChangeNotifier {
     _peerConnection = await createPeerConnection({
       'sdpSemantics': 'unified-plan',
     });
+
+    // _peerConnection!.onTrack = _onTrack;
 
     //* Create Data Channel
     _dataChannelDict = RTCDataChannelInit();
@@ -119,7 +136,9 @@ class TrackingController extends ChangeNotifier {
       _dataChannelDict!,
     );
     _dataChannel!.onMessage = (RTCDataChannelMessage message) {
-      posture = message.text;
+      Map dataMap = jsonDecode(message.text);
+      posture = dataMap["posture"];
+      eyeHealth = dataMap["eye_strain"] == 0 ? "Good" : "Bad";
     };
 
     final mediaConstraints = <String, dynamic>{
@@ -139,7 +158,7 @@ class TrackingController extends ChangeNotifier {
     try {
       var stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
       _localStream = stream;
-      _localRenderer.srcObject = _localStream;
+       _localRenderer.srcObject = _localStream;
       stream.getTracks().forEach((element) {
         _peerConnection!.addTrack(element, stream);
       });
@@ -151,7 +170,7 @@ class TrackingController extends ChangeNotifier {
         );
         RTCRtpSender videoSender = videoTransceiver.sender;
         videoSender.replaceTrack(null);
-        await Future.delayed(Duration(milliseconds: 100));
+        await Future.delayed(Duration(milliseconds: 300));
         final userVideoTrack = stream.getVideoTracks()[0];
         videoSender.replaceTrack(userVideoTrack);
       });
