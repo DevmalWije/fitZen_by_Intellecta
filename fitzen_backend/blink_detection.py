@@ -12,38 +12,45 @@ face_detector = dlib.get_frontal_face_detector()
 eye_landmark_predictor = dlib.shape_predictor(
     "shape_predictor_68_face_landmarks.dat")
 
+blink_count = 0
+
 # main export function
 
 
 def detect_blinks(frame):
+    global blink_count
+    blink_dict = {}
+    eye_strain_level = 0
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_detector(gray)
-    blink_count = 0
 
     for face in faces:
         eye_landmarks = eye_landmark_predictor(gray, face)
-        left_eye_ratio = get_ratio_of_blinking(
-            [36, 37, 38, 39, 40, 41], eye_landmarks)
-        right_eye_ratio = get_ratio_of_blinking(
-            [42, 43, 44, 45, 46, 47], eye_landmarks)
+
+        left_eye_ratio = get_ratio_of_blinking(frame,
+                                               [36, 37, 38, 39, 40, 41], eye_landmarks)
+
+        right_eye_ratio = get_ratio_of_blinking(frame,
+                                                [42, 43, 44, 45, 46, 47], eye_landmarks)
 
         # to get the average ration of both eye
         EAR = (left_eye_ratio + right_eye_ratio)/2
 
         if EAR > 5.7:
             blink_count += 1
-            print(blink_count, "blink detected")
-
-    cv2.imshow("Frame", frame)
+            # print(blink_count, "blink detected")
 
     if (time_interval_passed()):
-        if (counter < 10):
-            print("Alert!")
-        counter = 0
+        if (blink_count < 9):
+            # print("Alert!")
+            # print("You have blinked less than 10 times in 10 seconds")
+            eye_strain_level = 1
+        blink_count = 0
 
-    key = cv2.waitKey(1)
+    blink_dict = {'blink_count': blink_count,
+                  'image_frame': frame, 'eye_strain_level': eye_strain_level}
 
-    return blink_count, key
+    return blink_dict
 
 # to get the middle point of an eye to draw vertical line
 
@@ -55,7 +62,7 @@ def mid_point(p1, p2):
 font = cv2.FONT_HERSHEY_PLAIN
 
 
-def get_ratio_of_blinking(points_of_eye, facila_landmarks):
+def get_ratio_of_blinking(frame, points_of_eye, facila_landmarks):
     # to get the left and right point of an eye to draw a horizontal line
     left_point = (facila_landmarks.part(
         points_of_eye[0]).x, facila_landmarks.part(points_of_eye[0]).y)
@@ -92,49 +99,38 @@ def time_interval_passed():
     time_delta = datetime.datetime.now() - start_time
     seconds_passed = time_delta.total_seconds()
 
-    # Check if one minute interval has passed
-    if (seconds_passed >= 60):
+    # Check if 30 second  interval has passed
+    if (seconds_passed >= 30):
         start_time = datetime.datetime.now()
         return True
 
 
-while True:
-    _, frame = cap.read()
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+# def get_blink_count(frame):
+#     global counter
+#     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+#     faces = face_detector(gray)
+#     for face in faces:
+#         eye_landmarks = eye_landmark_predictor(gray, face)
 
-    faces = face_detector(gray)
+#         left_eye_ratio = get_ratio_of_blinking(
+#             [36, 37, 38, 39, 40, 41], eye_landmarks)
+#         right_eye_ratio = get_ratio_of_blinking(
+#             [42, 43, 44, 45, 46, 47], eye_landmarks)
 
-    for face in faces:
-        # x, y = face.left(), face.top()
-        # x1, y1 = face.right(), face.bottom()
-        # cv2.rectangle(frame, (x,y), (x1,y1), (0, 255, 0), 2)
+#         # getting average ratio of both eye
+#         EAR = (left_eye_ratio + right_eye_ratio)/2
 
-        eye_landmarks = eye_landmark_predictor(gray, face)
+#         if EAR < 0.3:
+#             counter += 1
 
-        left_eye_ratio = get_ratio_of_blinking(
-            [36, 37, 38, 39, 40, 41], eye_landmarks)
-        right_eye_ratio = get_ratio_of_blinking(
-            [42, 43, 44, 45, 46, 47], eye_landmarks)
+#     if time_interval_passed():
+#         if counter >= 10:
+#             print("ALERT!!!")
+#         counter = 0
 
-        # to get the average ration of both eye
-        EAR = (left_eye_ratio + right_eye_ratio)/2
+#     if cv2.waitKey(10) & 0xFF == ord('q'):
+#         cv2.destroyAllWindows()
 
-        if EAR > 5.7:
-            # cv2.putText(frame, "BLINKING", (50, 150), font, 7, (255, 255, 255))
-            # cv2.putText(frame, f'Blink Count: {counter}', (50, 100), font, 7, (255, 0, 255))
-            counter = counter+1
-            print(counter, "blink detect")
-
-    cv2.imshow("Frame", frame)
-
-    if (time_interval_passed()):
-        if (counter < 10):
-            print("Alert!")
-        counter = 0
-
-    key = cv2.waitKey(1)
-    if key == 25:
-        break
 
 cap.release()
 cv2.destroyAllWindows()

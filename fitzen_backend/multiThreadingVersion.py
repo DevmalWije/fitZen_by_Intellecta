@@ -34,15 +34,15 @@ async def image_frame_model(frame):
     posture_dict = {}
 
     # Recolor Feed
-    image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
+    # image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) images are not recolored because the images are already in RGB format
+    image = frame
     # Make Detections
     # start_time = datetime.datetime.now()  # get start time
     results = holistic.process(image)
     # end_time = datetime.datetime.now()  # get end time
 
-    # Recolor image back to BGR for rendering
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    # # Recolor image back to BGR for rendering
+    # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
     # Export coordinates
     pose_language_class = "unknown"  # Initialize with a default value
@@ -64,7 +64,6 @@ async def image_frame_model(frame):
         # Make Detections
         X = pd.DataFrame([row])
         pose_language_class = model.predict(X)[0]
-        print(pose_language_class)
         pose_language_prob = model.predict_proba(X)[0]
 
         # writing posture class and detected time to text file
