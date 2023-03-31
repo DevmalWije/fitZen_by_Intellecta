@@ -18,7 +18,7 @@ class TrackingScreen extends StatefulWidget {
 class _TrackingScreenState extends State<TrackingScreen> {
   void startTracking() async {
     await Provider.of<TrackingController>(context, listen: false).initializeRenderer();
-    await Provider.of<TrackingController>(context, listen: false).startConnection();
+    await Provider.of<TrackingController>(context, listen: false).startConnection(context);
   }
 
   @override
@@ -29,8 +29,8 @@ class _TrackingScreenState extends State<TrackingScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     Provider.of<TrackingController>(context, listen: false).stopConnection();
+    super.dispose();
   }
 
   @override

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:http/http.dart' as http;
 import 'package:fitzen_frontend/constants.dart';
@@ -18,8 +19,11 @@ class TrackingController extends ChangeNotifier {
   Timer? _timer;
 
   bool get isStarted => _isStarted;
+
   bool get isLoading => _isLoading;
+
   String get posture => _posture;
+
   RTCVideoRenderer get localRenderer => _localRenderer;
 
   set isStarted(bool value) {
@@ -51,7 +55,7 @@ class TrackingController extends ChangeNotifier {
     }
   }
 
-  Future<void> _negotiateRemoteConnection() async {
+  Future<void> _negotiateRemoteConnection(BuildContext context) async {
     return _peerConnection!
         .createOffer()
         .then((offer) {
@@ -88,12 +92,18 @@ class TrackingController extends ChangeNotifier {
               ),
             );
           } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(response.reasonPhrase ?? "Something went Wrong!"),
+                backgroundColor: Colors.red,
+              ),
+            );
             print(response.reasonPhrase);
           }
         });
   }
 
-  Future<void> startConnection() async {
+  Future<void> startConnection(BuildContext context) async {
     isLoading = true;
     //* Create Peer Connection
     if (_peerConnection != null) return;
@@ -146,9 +156,16 @@ class TrackingController extends ChangeNotifier {
         videoSender.replaceTrack(userVideoTrack);
       });
 
-      await _negotiateRemoteConnection();
+      await _negotiateRemoteConnection(context);
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Colors.red,
+        ),
+      );
       print(e.toString());
+      Navigator.pop(context);
     }
 
     isStarted = true;
