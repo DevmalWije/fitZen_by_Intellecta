@@ -50,10 +50,14 @@ from plyer import notification
 from multiprocessing import Pool, cpu_count
 
 detector = FaceMeshDetector(maxFaces=1)  # No of faces to be detected.
+depth = 0
+depth_state = "None"
 
 
 def start_detection(frame):
-
+    depth_dict = {}
+    global depth
+    global depth_state
     img, faces = detector.findFaceMesh(frame, draw=False)
 
     if faces:
@@ -67,25 +71,28 @@ def start_detection(frame):
 
         # finding distance between
         f = 642
-        d = (W * f) / w
-        print(d)
+        depth = (W * f) / w
 
-        if d < 50:
+        if depth < 50:
             cvzone.putTextRect(img, f'Too Close',
                                (face[10][0] - 100, face[10][1] - 50),
                                scale=2)
+            depth_state ="Too Close"
             # adding python notificatons
             # notification.notify(
             #     title='Face Distance',
             #     message='Too Close!',
-        elif d > 100:
+        elif depth > 100:
             cvzone.putTextRect(img, f'Too Far',
                                (face[10][0] - 100, face[10][1] - 50),
                                scale=2)
+            depth_state ="Too Far"
 
         else:
-            cvzone.putTextRect(img, f'Distance: {int(d)}cm',
+            cvzone.putTextRect(img, f'Distance: {int(depth)}cm',
                                (face[10][0] - 100, face[10][1] - 50),
                                scale=2)
 
-    return img
+    depth_dict = {'depth': depth, 'image_frame': img,
+                  'depth_state': depth_state}
+    return depth_dict

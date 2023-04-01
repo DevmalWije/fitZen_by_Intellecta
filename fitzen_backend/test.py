@@ -22,7 +22,10 @@ while cap.isOpened():
     #     print("Key 'image_frame' is not present in the dictionary")
     
     #depth measurement test
-    cv2.imshow('g', FaceDepthMeasurement.start_detection(frame))
+    dict= FaceDepthMeasurement.start_detection(frame)
+    cv2.imshow('g', dict['image_frame'])
+    depth_state=dict['depth_state']
+    print(depth_state)
 
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
