@@ -17,7 +17,8 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool isLoading = false;
 
   @override
@@ -39,7 +40,8 @@ class _SignUpState extends State<SignUp> {
               Expanded(
                 flex: 2,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
                   child: Column(
                     children: [
                       Image.asset(
@@ -47,7 +49,8 @@ class _SignUpState extends State<SignUp> {
                         width: 100,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 30),
                         child: Text(
                           "Hello!\nRegister to get start.",
                           style: TextStyle(
@@ -82,28 +85,36 @@ class _SignUpState extends State<SignUp> {
                           backgroundColor: kBlue,
                           text: "Signup",
                           isLoading: isLoading,
-                          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 40),
                           onPressed: () async {
                             String email = _emailController.text.trim();
                             String password = _passwordController.text.trim();
-                            String confirmPassword = _confirmPasswordController.text.trim();
+                            String confirmPassword =
+                                _confirmPasswordController.text.trim();
 
                             if (email.isEmpty ||
                                 password.trim().isEmpty ||
                                 confirmPassword.trim().isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text("Please fill all the fields!"),
-                                  backgroundColor: Colors.red));
-                            } else if (password.trim() != confirmPassword.trim()) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text("Passwords does not match!"),
-                                  backgroundColor: Colors.red));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text("Please fill all the fields!"),
+                                      backgroundColor: Colors.red));
+                            } else if (password.trim() !=
+                                confirmPassword.trim()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text("Passwords does not match!"),
+                                      backgroundColor: Colors.red));
                             } else {
                               setState(() {
                                 isLoading = true;
                               });
                               bool isSuccess =
-                                  await Provider.of<UserController>(context, listen: false)
+                                  await Provider.of<UserController>(context,
+                                          listen: false)
                                       .signUp(email, password, onError: (e) {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
@@ -116,7 +127,8 @@ class _SignUpState extends State<SignUp> {
                               });
                               if (isSuccess) {
                                 Navigator.of(context).pushAndRemoveUntil(
-                                    CupertinoPageRoute(builder: (context) => Home()),
+                                    CupertinoPageRoute(
+                                        builder: (context) => Home()),
                                     (Route<dynamic> route) => false);
                               }
                             }
@@ -143,7 +155,7 @@ class _SignUpState extends State<SignUp> {
                             child: Text(
                               "Log In",
                               style: TextStyle(
-                                color: Colors.blue,
+                                color: Color.fromRGBO(33, 150, 243, 1),
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
