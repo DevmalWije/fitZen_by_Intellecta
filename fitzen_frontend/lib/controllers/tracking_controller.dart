@@ -18,6 +18,8 @@ class TrackingController extends ChangeNotifier {
   RTCDataChannelInit? _dataChannelDict;
   MediaStream? _localStream;
   Timer? _timer;
+  Timer? _elapsedTimer;
+  int _elapsedSeconds = 0;
 
   bool get isStarted => _isStarted;
 
@@ -25,6 +27,13 @@ class TrackingController extends ChangeNotifier {
 
   String get posture => _posture;
   String get eyeHealth => _eyeHealth;
+  String get elapsedSeconds {
+    final hours = _elapsedSeconds ~/ 3600;
+    final minutes = (_elapsedSeconds ~/ 60) % 60;
+    final seconds = _elapsedSeconds % 60;
+    final timeString = '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    return timeString;
+  }
 
   RTCVideoRenderer get localRenderer => _localRenderer;
 
@@ -90,6 +99,13 @@ class TrackingController extends ChangeNotifier {
 
           String data = "";
           if (response.statusCode == 200) {
+            DateTime startTime = DateTime.now();
+            _elapsedTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+              final now = DateTime.now();
+              final difference = now.difference(startTime);
+              _elapsedSeconds = difference.inSeconds;
+              notifyListeners();
+            });
             data = await response.stream.bytesToString();
             var dataMap = json.decode(data);
             await _peerConnection!.setRemoteDescription(
@@ -199,6 +215,8 @@ class TrackingController extends ChangeNotifier {
       _peerConnection = null;
       _localRenderer.srcObject = null;
       _timer?.cancel();
+      _elapsedTimer?.cancel();
+      _elapsedSeconds = 0;
     } catch (e) {
       print(e.toString());
     }

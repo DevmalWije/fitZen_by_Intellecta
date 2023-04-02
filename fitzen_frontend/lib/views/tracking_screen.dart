@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:fitzen_frontend/widgets/button.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class TrackingScreen extends StatefulWidget {
@@ -164,7 +165,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     SizedBox(height: 10),
                     SummaryCard(
                       title: "Current Screen Time",
-                      value: "02:15:12",
+                      value: trackingController.elapsedSeconds,
                       color: kBlue,
                       padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
                     ),
