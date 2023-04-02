@@ -44,6 +44,8 @@ dependencies:
   shared_preferences: ^2.0.20
   flutter_dotenv: ^5.0.2
   intl: ^0.18.0
+  local_notifier: ^0.1.5
+  pausable_timer: ^1.0.0+7
 
 dev_dependencies:
   flutter_test:

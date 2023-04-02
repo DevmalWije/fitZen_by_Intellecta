@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:http/http.dart' as http;
 import 'package:fitzen_frontend/constants.dart';
+import 'package:local_notifier/local_notifier.dart';
+import 'package:pausable_timer/pausable_timer.dart';
 
 class TrackingController extends ChangeNotifier {
   bool _isStarted = false;
@@ -18,8 +20,9 @@ class TrackingController extends ChangeNotifier {
   RTCDataChannelInit? _dataChannelDict;
   MediaStream? _localStream;
   Timer? _timer;
-  Timer? _elapsedTimer;
+  PausableTimer? _elapsedTimer;
   int _elapsedSeconds = 0;
+  DateTime? _lastNotificationTime;
 
   bool get isStarted => _isStarted;
 
@@ -99,13 +102,11 @@ class TrackingController extends ChangeNotifier {
 
           String data = "";
           if (response.statusCode == 200) {
-            DateTime startTime = DateTime.now();
-            _elapsedTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-              final now = DateTime.now();
-              final difference = now.difference(startTime);
-              _elapsedSeconds = difference.inSeconds;
+            _elapsedTimer = PausableTimer(Duration(seconds: 1), () {
+              _elapsedSeconds++;
               notifyListeners();
-            });
+              _elapsedTimer!..reset()..start();
+            })..start();
             data = await response.stream.bytesToString();
             var dataMap = json.decode(data);
             await _peerConnection!.setRemoteDescription(
@@ -126,11 +127,27 @@ class TrackingController extends ChangeNotifier {
         });
   }
 
-  void _onTrack(RTCTrackEvent event) {
-    print("TRACK EVENT: ${event.streams.map((e) => e.id)}, ${event.track.id}");
-    if (event.track.kind == "video") {
-      print("HERE");
-      _localRenderer.srcObject = event.streams[0];
+  void _sendNotifications(RTCDataChannelMessage message){
+    Map dataMap = jsonDecode(message.text);
+    posture = dataMap["posture"];
+    eyeHealth = dataMap["eye_strain"] == 0 ? "Good" : "Bad";
+    _lastNotificationTime ??= DateTime.now().subtract(Duration(seconds: 20));
+
+    if(posture != "proper_posture"){
+      DateTime now = DateTime.now();
+      if(now.difference(_lastNotificationTime!).inSeconds > 20){
+        LocalNotification notification = LocalNotification(
+          title: "Poor Posture Detected!",
+        );
+        notification.show();
+        _lastNotificationTime = DateTime.now();
+      }
+    }
+
+    if(posture == "no pose detected"){
+        _elapsedTimer?.pause();
+    } else if(_elapsedTimer?.isPaused ?? false){
+      _elapsedTimer?.start();
     }
   }
 
@@ -142,8 +159,6 @@ class TrackingController extends ChangeNotifier {
       'sdpSemantics': 'unified-plan',
     });
 
-    // _peerConnection!.onTrack = _onTrack;
-
     //* Create Data Channel
     _dataChannelDict = RTCDataChannelInit();
     _dataChannelDict!.ordered = true;
@@ -151,11 +166,7 @@ class TrackingController extends ChangeNotifier {
       "data",
       _dataChannelDict!,
     );
-    _dataChannel!.onMessage = (RTCDataChannelMessage message) {
-      Map dataMap = jsonDecode(message.text);
-      posture = dataMap["posture"];
-      eyeHealth = dataMap["eye_strain"] == 0 ? "Good" : "Bad";
-    };
+    _dataChannel!.onMessage = _sendNotifications;
 
     final mediaConstraints = <String, dynamic>{
       'audio': false,

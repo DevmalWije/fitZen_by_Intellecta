@@ -7,8 +7,8 @@ import 'package:fitzen_frontend/widgets/summary_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:local_notifier/local_notifier.dart';
 import 'package:provider/provider.dart';
-
 import '../widgets/button.dart';
 
 class Home extends StatefulWidget {
@@ -192,7 +192,7 @@ class _HomeState extends State<Home> {
                     text: "Start Tracking",
                     icon: Icons.timer_outlined,
                     backgroundColor: kGreen,
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
