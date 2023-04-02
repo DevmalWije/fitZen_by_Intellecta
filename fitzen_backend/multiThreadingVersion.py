@@ -7,6 +7,8 @@ import os
 import pickle
 import warnings
 import datetime
+import asyncio
+import multiprocessing
 
 # drawing utilities
 mp_drawing = mp.solutions.drawing_utils
@@ -28,28 +30,18 @@ scaler = StandardScaler()
 scaler.fit(X)
 
 
-def image_frame_model(frame):
-    posture_list = []
+async def image_frame_model(frame):
     posture_dict = {}
-
-    # Recolor Feed
-    image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
+    image = frame
     # Make Detections
     # start_time = datetime.datetime.now()  # get start time
     results = holistic.process(image)
     # end_time = datetime.datetime.now()  # get end time
 
-    # # Calculate FPS
-    # time_diff = (end_time - start_time).total_seconds()
-    # fps = 1.0 / time_diff
-    # print(f"FPS: {fps}")
-
-    # Recolor image back to BGR for rendering
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
     # Export coordinates
     pose_language_class = "unknown"  # Initialize with a default value
+
     try:
         # Extract Pose landmarks
         pose = results.pose_landmarks.landmark
@@ -69,17 +61,39 @@ def image_frame_model(frame):
         pose_language_class = model.predict(X)[0]
         # print(pose_language_class)
         pose_language_prob = model.predict_proba(X)[0]
-        posture_list.append(pose_language_class)
 
         # writing posture class and detected time to text file
         with open("posture.txt", "a") as f:
             f.write(f"{pose_language_class},{datetime.datetime.now()}\n")
 
     except:
-        print("No posture detected")
+        pose_language_class = "no pose detected"
+        pass
 
     # adding the posture class and image frame to a dictionary
     posture_dict = {'posture_class': pose_language_class, 'image_frame': image}
-    # print(posture_dict)
 
     return posture_dict
+
+
+async def main_loop():
+    pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+    cap = cv2.VideoCapture(0)
+
+    while cap.isOpened():
+
+        s, frame = cap.read()
+        result = pool.apply_async(image_frame_model, (frame,))
+
+        d = result.get()
+
+        cv2.imshow('g', d['image_frame'])
+
+        if cv2.waitKey(10) & 0xFF == ord('q'):
+            break
+
+        cap.release()
+        cv2.destroyAllWindows()
+
+    pool.close()
+    pool.join()
