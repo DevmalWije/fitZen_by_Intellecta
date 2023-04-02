@@ -5,6 +5,7 @@ import multiThreadingVersion
 
 async def process_frame(frame):
     dict = await multiThreadingVersion.image_frame_model(frame)
+    print(dict['good_posture_percent'])
     cv2.imshow('g', dict['image_frame'])
 
 cap = cv2.VideoCapture(0)
