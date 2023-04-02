@@ -200,6 +200,7 @@ class TrackingController extends ChangeNotifier {
         ),
       );
       print(e.toString());
+      await stopConnection();
       Navigator.pop(context);
     }
 
@@ -207,19 +208,19 @@ class TrackingController extends ChangeNotifier {
     isLoading = false;
   }
 
-  void stopConnection() async {
+  Future<void> stopConnection() async {
     try {
-      await _localStream?.dispose();
-      await _dataChannel?.close();
-      await _peerConnection?.close();
+      isStarted = false;
       _peerConnection = null;
       _localRenderer.srcObject = null;
       _timer?.cancel();
       _elapsedTimer?.cancel();
       _elapsedSeconds = 0;
+      await _peerConnection?.close();
+      await _dataChannel?.close();
+      await _localStream?.dispose();
     } catch (e) {
       print(e.toString());
     }
-    isStarted = false;
   }
 }

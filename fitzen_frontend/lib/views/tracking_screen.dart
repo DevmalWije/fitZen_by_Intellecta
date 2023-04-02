@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:fitzen_frontend/widgets/button.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class TrackingScreen extends StatefulWidget {
@@ -26,12 +25,6 @@ class _TrackingScreenState extends State<TrackingScreen> {
   void initState() {
     super.initState();
     startTracking();
-  }
-
-  @override
-  void dispose() {
-    Provider.of<TrackingController>(context, listen: false).stopConnection();
-    super.dispose();
   }
 
   @override
@@ -175,9 +168,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
                       icon: Icons.timer_outlined,
                       isLoading: trackingController.isLoading,
                       backgroundColor: kRed,
-                      onPressed: () {
+                      onPressed: () async {
                         if (trackingController.isStarted) {
-                          trackingController.stopConnection();
+                          await trackingController.stopConnection();
                           Navigator.of(context).pushAndRemoveUntil(
                               CupertinoPageRoute(builder: (context) => Home()),
                               (Route<dynamic> route) => false);
