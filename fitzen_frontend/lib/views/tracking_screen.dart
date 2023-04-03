@@ -1,4 +1,5 @@
 import 'package:fitzen_frontend/constants.dart';
+import 'package:fitzen_frontend/controllers/settings_controller.dart';
 import 'package:fitzen_frontend/controllers/tracking_controller.dart';
 import 'package:fitzen_frontend/views/home.dart';
 import 'package:fitzen_frontend/widgets/summary_card.dart';
@@ -18,7 +19,8 @@ class TrackingScreen extends StatefulWidget {
 class _TrackingScreenState extends State<TrackingScreen> {
   void startTracking() async {
     await Provider.of<TrackingController>(context, listen: false).initializeRenderer();
-    await Provider.of<TrackingController>(context, listen: false).startConnection(context);
+    await Provider.of<TrackingController>(context, listen: false)
+        .startConnection(context, Provider.of<SettingsController>(context, listen: false));
   }
 
   @override
@@ -65,14 +67,14 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     SummaryCard(
                       title: "Current Posture",
                       value: trackingController.posture,
-                      color: kGreen,
+                      color: trackingController.posture == "Good" ? kGreen : kRed,
                       padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
                     ),
                     SizedBox(height: 10),
                     SummaryCard(
                       title: "Current Eye Health",
                       value: trackingController.eyeHealth,
-                      color: kRed,
+                      color: trackingController.eyeHealth == "Good" ? kGreen : kRed,
                       padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),
                     ),
                     SizedBox(height: 10),

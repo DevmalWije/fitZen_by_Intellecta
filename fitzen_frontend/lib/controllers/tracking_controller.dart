@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:fitzen_frontend/controllers/settings_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -74,7 +75,7 @@ class TrackingController extends ChangeNotifier {
     }
   }
 
-  Future<void> _negotiateRemoteConnection(BuildContext context) async {
+  Future<void> _negotiateRemoteConnection(BuildContext context, SettingsController settingsController) async {
     return _peerConnection!
         .createOffer()
         .then((offer) {
@@ -104,6 +105,17 @@ class TrackingController extends ChangeNotifier {
           if (response.statusCode == 200) {
             _elapsedTimer = PausableTimer(Duration(seconds: 1), () {
               _elapsedSeconds++;
+
+              //sending 20-20-20 notification
+              if(settingsController.twentyTwentyTwentyNotification == ON && _elapsedSeconds % (1 * 60) == 0 && _elapsedSeconds != 0){
+                LocalNotification notification = LocalNotification(
+                    title: "Take a break!",
+                    body: "Please take a 20-second break and look at something 20 feet away to give your eyes"
+                        " a chance to relax!"
+                );
+                notification.show();
+              }
+
               notifyListeners();
               _elapsedTimer!..reset()..start();
             })..start();
@@ -127,15 +139,42 @@ class TrackingController extends ChangeNotifier {
         });
   }
 
-  void _sendNotifications(RTCDataChannelMessage message){
+  void _sendNotifications(RTCDataChannelMessage message, SettingsController settingsController){
     Map dataMap = jsonDecode(message.text);
-    posture = dataMap["posture"];
+    switch(dataMap["posture"]){
+      case "proper_posture":{
+        posture = "Good";
+      }
+      break;
+
+      case "bad_posture":{
+        posture = "Bad";
+      }
+      break;
+
+      case "no pose detected":{
+        posture = "No Pose Detected";
+      }
+      break;
+
+      case "too_close":{
+        posture = "Too Close";
+      }
+      break;
+
+      default: {
+        posture = "N/A";
+      }
+      break;
+    }
+
     eyeHealth = dataMap["eye_strain"] == 0 ? "Good" : "Bad";
     _lastNotificationTime ??= DateTime.now().subtract(Duration(seconds: 20));
 
-    if(posture != "proper_posture"){
+    //sending poor posture notification
+    if(posture == "Bad" && settingsController.poorPostureNotificationInterval != OFF){
       DateTime now = DateTime.now();
-      if(now.difference(_lastNotificationTime!).inSeconds > 20){
+      if(now.difference(_lastNotificationTime!).inSeconds > settingsController.poorPostureNotificationInterval * 60){
         LocalNotification notification = LocalNotification(
           title: "Poor Posture Detected!",
         );
@@ -144,14 +183,24 @@ class TrackingController extends ChangeNotifier {
       }
     }
 
-    if(posture == "no pose detected"){
+    //sending low blink count notification
+    if(settingsController.lowBlinkCountNotification == ON && eyeHealth == "Bad"){
+      LocalNotification notification = LocalNotification(
+        title: "Low Blink Count!",
+        body: "Your blink count has been low in the past 30 seconds. Please blink more!"
+      );
+      notification.show();
+    }
+
+    //pause and resume the timer based on detection of pose
+    if(posture == "No Pose Detected"){
         _elapsedTimer?.pause();
     } else if(_elapsedTimer?.isPaused ?? false){
       _elapsedTimer?.start();
     }
   }
 
-  Future<void> startConnection(BuildContext context) async {
+  Future<void> startConnection(BuildContext context, SettingsController settingsController) async {
     isLoading = true;
     //* Create Peer Connection
     if (_peerConnection != null) return;
@@ -166,7 +215,9 @@ class TrackingController extends ChangeNotifier {
       "data",
       _dataChannelDict!,
     );
-    _dataChannel!.onMessage = _sendNotifications;
+    _dataChannel!.onMessage = (RTCDataChannelMessage message){
+      _sendNotifications(message, settingsController);
+    };
 
     final mediaConstraints = <String, dynamic>{
       'audio': false,
@@ -202,7 +253,7 @@ class TrackingController extends ChangeNotifier {
         videoSender.replaceTrack(userVideoTrack);
       });
 
-      await _negotiateRemoteConnection(context);
+      await _negotiateRemoteConnection(context, settingsController);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
