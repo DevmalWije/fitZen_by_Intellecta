@@ -5,8 +5,10 @@ class SummaryCard extends StatelessWidget {
   final String value;
   final Color color;
   final EdgeInsetsGeometry? padding;
+  final double? titleSize;
+  final double? valueSize;
 
-  const SummaryCard({Key? key, required this.title, required this.value, required this.color, this.padding})
+  const SummaryCard({Key? key, required this.title, required this.value, required this.color, this.padding, this.titleSize, this.valueSize})
       : super(key: key);
 
   @override
@@ -25,12 +27,15 @@ class SummaryCard extends StatelessWidget {
               value,
               style: Theme.of(context).textTheme.headline2!.copyWith(
                 color: Colors.white,
+                fontSize: valueSize
               ),
               textAlign: TextAlign.center,
             ),
             Text(
               title,
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.caption!.copyWith(
+                fontSize: titleSize,
+              ),
               textAlign: TextAlign.center,
             ),
           ],

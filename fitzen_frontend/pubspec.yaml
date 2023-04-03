@@ -46,6 +46,7 @@ dependencies:
   intl: ^0.18.0
   local_notifier: ^0.1.5
   pausable_timer: ^1.0.0+7
+  pie_chart: ^5.3.2
 
 dev_dependencies:
   flutter_test:
