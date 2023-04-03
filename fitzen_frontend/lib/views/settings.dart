@@ -38,15 +38,17 @@ class Settings extends StatelessWidget {
               children: [
                 Expanded(
                   child: SettingCard(
-                    settingName: "Camera",
-                    value: "HD Webcam",
+                    settingName: "Poor Posture Notification Interval",
+                    values: [1, 5, 10, 30, OFF],
+                    onChanged: (value) {},
                   ),
                 ),
-                SizedBox(width: 100),
+                SizedBox(width: 80),
                 Expanded(
                   child: SettingCard(
-                    settingName: "Camera",
-                    value: "HD Webcam",
+                    settingName: "Low Blink Count Notification",
+                    values: [ON, OFF],
+                    onChanged: (value) {},
                   ),
                 )
               ],
@@ -56,34 +58,14 @@ class Settings extends StatelessWidget {
               children: [
                 Expanded(
                   child: SettingCard(
-                    settingName: "Camera",
-                    value: "HD Webcam",
+                    settingName: "20-20-20 Rule Notification",
+                    values: [ON, OFF],
+                    onChanged: (value) {},
                   ),
                 ),
-                SizedBox(width: 100),
+                SizedBox(width: 80),
                 Expanded(
-                  child: SettingCard(
-                    settingName: "Camera",
-                    value: "HD Webcam",
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 25),
-            Row(
-              children: [
-                Expanded(
-                  child: SettingCard(
-                    settingName: "Camera",
-                    value: "HD Webcam",
-                  ),
-                ),
-                SizedBox(width: 100),
-                Expanded(
-                  child: SettingCard(
-                    settingName: "Camera",
-                    value: "HD Webcam",
-                  ),
+                  child: SizedBox.shrink(),
                 )
               ],
             ),

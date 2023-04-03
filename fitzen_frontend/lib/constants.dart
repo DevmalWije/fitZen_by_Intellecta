@@ -8,5 +8,8 @@ final Color kPurple = Color(0xff773CF5);
 final Color kBackgroundColor = Color(0xffffffff);
 final Color kDarkGray = Color(0xff3f3f40);
 
+const int ON = 0;
+const int OFF = -1;
+
 const API = "http://localhost:3000/offer";
 // const API = "http://143.198.80.241:3000/offer";
