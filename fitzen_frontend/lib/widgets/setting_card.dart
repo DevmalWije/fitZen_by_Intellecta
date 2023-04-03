@@ -5,8 +5,9 @@ class SettingCard extends StatefulWidget {
   final String settingName;
   final List<int> values;
   final Function onChanged;
+  final int defaultValue;
 
-  const SettingCard({Key? key, required this.settingName, required this.values, required this.onChanged}) : super(key: key);
+  const SettingCard({Key? key, required this.settingName, required this.values, required this.onChanged, required this.defaultValue}) : super(key: key);
 
   @override
   State<SettingCard> createState() => _SettingCardState();
@@ -18,7 +19,7 @@ class _SettingCardState extends State<SettingCard> {
   @override
   void initState() {
     super.initState();
-    selectedValue = widget.values[0];
+    selectedValue = widget.defaultValue;
   }
 
   @override

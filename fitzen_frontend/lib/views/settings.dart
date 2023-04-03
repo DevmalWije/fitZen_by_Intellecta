@@ -1,13 +1,15 @@
 import 'package:fitzen_frontend/constants.dart';
+import 'package:fitzen_frontend/controllers/settings_controller.dart';
 import 'package:fitzen_frontend/widgets/setting_card.dart';
 import 'package:flutter/material.dart';
-import 'package:fitzen_frontend/widgets/button.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var settingsController = Provider.of<SettingsController>(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 40),
@@ -40,7 +42,9 @@ class Settings extends StatelessWidget {
                   child: SettingCard(
                     settingName: "Poor Posture Notification Interval",
                     values: [1, 5, 10, 30, OFF],
-                    onChanged: (value) {},
+                    defaultValue: settingsController.poorPostureNotificationInterval,
+                    onChanged: (value) =>
+                        settingsController.poorPostureNotificationInterval = value,
                   ),
                 ),
                 SizedBox(width: 80),
@@ -48,7 +52,8 @@ class Settings extends StatelessWidget {
                   child: SettingCard(
                     settingName: "Low Blink Count Notification",
                     values: [ON, OFF],
-                    onChanged: (value) {},
+                    defaultValue: settingsController.lowBlinkCountNotification,
+                    onChanged: (value) => settingsController.lowBlinkCountNotification = value,
                   ),
                 )
               ],
@@ -60,23 +65,13 @@ class Settings extends StatelessWidget {
                   child: SettingCard(
                     settingName: "20-20-20 Rule Notification",
                     values: [ON, OFF],
-                    onChanged: (value) {},
+                    defaultValue: settingsController.twentyTwentyTwentyNotification,
+                    onChanged: (value) => settingsController.twentyTwentyTwentyNotification = value,
                   ),
                 ),
                 SizedBox(width: 80),
-                Expanded(
-                  child: SizedBox.shrink(),
-                )
+                Expanded(child: SizedBox.shrink())
               ],
-            ),
-            Expanded(child: SizedBox.shrink()),
-
-            //save button
-            Button(
-              backgroundColor: kPurple,
-              text: "Save",
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-              onPressed: () {},
             ),
           ],
         ),
