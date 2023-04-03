@@ -1,9 +1,18 @@
+import 'dart:async';
+
 import 'package:firedart/auth/user_gateway.dart';
+import 'package:fitzen_frontend/constants.dart';
+import 'package:fitzen_frontend/services/api_service.dart';
 import 'package:fitzen_frontend/services/auth_service.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../views/login.dart';
 
 class UserController {
   final AuthService _authService = AuthService();
+  final APIService _apiService = APIService();
 
   Future<bool> signUp(String email, String password, {required Function onError}) async {
     User? user = await _authService.signUp(email, password, onError: onError);
@@ -44,4 +53,30 @@ class UserController {
     }
   }
 
+
+  //database
+
+  fetchData(BuildContext context) async {
+    Map? result = await _apiService.sendGETRequest("validate", onError: (e, logout) async {
+      if(e.toString().toLowerCase().contains("too early")){
+        await Future.delayed(Duration(seconds: 3));
+        await fetchData(context);
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e),
+        backgroundColor: Colors.red,
+      ));
+      if(logout){
+        signOut();
+        Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute(builder: (context) => Login()),
+                (Route<dynamic> route) => false);
+      }
+    });
+
+
+    print(result);
+  }
 }

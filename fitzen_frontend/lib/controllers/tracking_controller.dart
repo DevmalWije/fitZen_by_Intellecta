@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:fitzen_frontend/controllers/settings_controller.dart';
+import 'package:fitzen_frontend/models/session.dart';
+import 'package:fitzen_frontend/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -9,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:fitzen_frontend/constants.dart';
 import 'package:local_notifier/local_notifier.dart';
 import 'package:pausable_timer/pausable_timer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TrackingController extends ChangeNotifier {
   bool _isStarted = false;
@@ -24,6 +27,7 @@ class TrackingController extends ChangeNotifier {
   PausableTimer? _elapsedTimer;
   int _elapsedSeconds = 0;
   DateTime? _lastNotificationTime;
+  Session? _session;
 
   bool get isStarted => _isStarted;
 
@@ -89,7 +93,7 @@ class TrackingController extends ChangeNotifier {
           };
           var request = http.Request(
             'POST',
-            Uri.parse(API),
+            Uri.parse("$API/offer"),
           );
           request.body = json.encode(
             {
@@ -169,6 +173,7 @@ class TrackingController extends ChangeNotifier {
     }
 
     eyeHealth = dataMap["eye_strain"] == 0 ? "Good" : "Bad";
+    _session = Session.fromJson(dataMap);
     _lastNotificationTime ??= DateTime.now().subtract(Duration(seconds: 20));
 
     //sending poor posture notification
@@ -272,6 +277,9 @@ class TrackingController extends ChangeNotifier {
 
   Future<void> stopConnection() async {
     try {
+      if(_session != null){
+        await sendDataToDatabase(_session!);
+      }
       isStarted = false;
       _peerConnection = null;
       _localRenderer.srcObject = null;
@@ -284,5 +292,23 @@ class TrackingController extends ChangeNotifier {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  sendDataToDatabase(Session session) async {
+    isLoading = true;
+    session.elapsedSeconds = _elapsedSeconds;
+    APIService apiService = APIService();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String uid = preferences.getString("uid")!;
+    await apiService.sendPOSTRequest('add-session', {
+      'elapsedSeconds': session.elapsedSeconds,
+      'blinkCount': session.blinkCount,
+      'goodPostureCount': session.goodPostureCount,
+      'badPostureCount': session.badPostureCount,
+      'uid': uid,
+    }, onError: (e){
+      print(e);
+    });
+    isLoading = false;
   }
 }

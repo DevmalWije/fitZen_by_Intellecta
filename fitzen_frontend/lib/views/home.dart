@@ -19,6 +19,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<UserController>(context, listen: false).fetchData(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
