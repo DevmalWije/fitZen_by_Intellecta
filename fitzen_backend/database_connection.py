@@ -50,13 +50,14 @@ async def addSession(request):
                 "badPostureCount": firestore.Increment(data['badPostureCount']),
                 "score": 120
             })
-            data['timestamp'] = firestore.SERVER_TIMESTAMP
         else:
             db.collection("users").document(data['uid']).set({
                 "elapsedSeconds": data["elapsedSeconds"],
                 "badPostureCount": data["badPostureCount"],
                 "score": 120
             })
+            
+        data['timestamp'] = firestore.SERVER_TIMESTAMP
         db.collection("users").document(data['uid']).collection('sessions').add(data)
 
 
