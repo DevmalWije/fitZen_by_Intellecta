@@ -126,7 +126,7 @@ def time_interval_passed():
     seconds_passed = time_delta.total_seconds()
 
     # Check if 30 second  interval has passed
-    if (seconds_passed >= 10):
+    if (seconds_passed >= 20):
         start_time = datetime.datetime.now()
         return True
 
