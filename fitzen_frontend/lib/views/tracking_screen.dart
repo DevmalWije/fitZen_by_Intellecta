@@ -72,7 +72,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     ),
                     SizedBox(height: 10),
                     SummaryCard(
-                      title: "Current Eye Health",
+                      title: "Last 30 Seconds Eye Strain Level",
                       value: trackingController.eyeHealth,
                       color: trackingController.eyeHealth == "Good" ? kGreen : kRed,
                       padding: EdgeInsets.symmetric(horizontal: 35, vertical: 20),

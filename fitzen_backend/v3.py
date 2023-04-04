@@ -1,3 +1,13 @@
+import blink_detection
+import asyncio
+import multiThreadingVersion
+import optimisedModelImp
+from av import VideoFrame
+from aiortc.contrib.media import MediaRelay
+from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
+import aiohttp_cors
+from aiohttp import web
+import json
 import time
 import cv2
 import mediapipe as mp
@@ -31,7 +41,7 @@ drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
 #         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 #         if results.multi_face_landmarks:
 #             for face_landmarks in results.multi_face_landmarks:
-                
+
 #                 mp_drawing.draw_landmarks(
 #                     image=image,
 #                     landmark_list=face_landmarks,
@@ -53,27 +63,14 @@ drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
 #                 #     landmark_drawing_spec=None,
 #                 #     connection_drawing_spec=mp_drawing_styles
 #                 #     .get_default_face_mesh_iris_connections_style())
-                
-                
-                
-                
+
+
 #         # Flip the image horizontally for a selfie-view display.
 #         # cv2.imshow('MediaPipe Face Mesh', cv2.flip(image, 1))
 #         if cv2.waitKey(5) & 0xFF == 27:
 #             break
 # cap.release()
 
-
-import json
-from aiohttp import web
-import aiohttp_cors
-from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
-from aiortc.contrib.media import MediaRelay
-from av import VideoFrame
-import optimisedModelImp
-import multiThreadingVersion
-import asyncio
-import blink_detection
 
 relay = MediaRelay()
 
@@ -83,6 +80,7 @@ face_mesh = mp_face_mesh.FaceMesh(
     min_detection_confidence=0.5,
     min_tracking_confidence=0.5
 )
+
 
 class VideoTransformTrack(MediaStreamTrack):
     """
@@ -98,12 +96,12 @@ class VideoTransformTrack(MediaStreamTrack):
 
     async def recv(self):
         frame = await self.track.recv()
-        
+
         # Use to_rgb() function of VideoFrame object to avoid color conversion step
         image = frame.to_rgb().to_ndarray()
 
         # result_dict = optimisedModelImp.image_frame_model(image)
-        start_time = time.time() # start the timer
+        start_time = time.time()  # start the timer
         dict = await multiThreadingVersion.image_frame_model(image)
         blink_dict = blink_detection.detect_blinks(image)
         end_time = time.time()
@@ -111,12 +109,34 @@ class VideoTransformTrack(MediaStreamTrack):
         print(dict['posture_class'])
         print(blink_dict["eye_strain_level"])
 
-
         if VideoTransformTrack.channel != None:
-            VideoTransformTrack.channel.send(json.dumps({
-                'posture': dict['posture_class'],
-                'eye_strain': blink_dict["eye_strain_level"]
-            }))
+            posture_count = 0
+            last_posture = ""
+            while True:
+                # getting the current posture
+                current_posture = dict['posture_class']
+                # checking if the posture is same as the last posture
+                if current_posture != last_posture:
+                    posture_count = 0
+                    last_posture = current_posture
+                else:
+                    posture_count += 1
+                # if the posture is same for 10 frames then send the posture to the client
+                if posture_count >= 10:
+                    posture_count = 0
+                    if last_posture == "proper_posture":
+                        VideoTransformTrack.channel.send(json.dumps({
+                            'posture': "Good Posture",
+                            'eye_strain': blink_dict["eye_strain_level"]
+                        }))
+                    else:
+                        VideoTransformTrack.channel.send(json.dumps({
+                            'posture': "Bad Posture",
+                            'eye_strain': blink_dict["eye_strain_level"]
+                        }))
+                    break
+                else:
+                    pass
 
         # # Use FaceMesh object initialized outside of recv function
         # results = face_mesh.process(image)
@@ -132,13 +152,15 @@ class VideoTransformTrack(MediaStreamTrack):
         #             connection_drawing_spec=mp_drawing_styles
         #             .get_default_face_mesh_tesselation_style())
 
-        new_frame = VideoFrame.from_ndarray(dict['image_frame'], format="rgb24")
+        new_frame = VideoFrame.from_ndarray(
+            dict['image_frame'], format="rgb24")
         new_frame.pts = frame.pts
         new_frame.time_base = frame.time_base
         return new_frame
-    
+
 
 global pc
+
 
 async def offer(request):
     params = await request.json()
@@ -184,7 +206,6 @@ async def offer(request):
     )
 
 
-
 def root(request):
     return web.Response(
         content_type="application/json",
@@ -196,6 +217,7 @@ def root(request):
 # async def on_shutdown(app):
     # close peer connections
     # await pc.close()
+
 
 app = web.Application()
 cors = aiohttp_cors.setup(app)
