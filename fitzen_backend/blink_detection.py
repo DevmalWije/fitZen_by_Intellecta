@@ -1,39 +1,37 @@
 import cv2
-
 import numpy as np
-
 import dlib
 import os
 from math import hypot
 import datetime
 
-
 cap = cv2.VideoCapture(0)
-
-counter = 0
 
 start_time = datetime.datetime.now()
 
-
 face_detector = dlib.get_frontal_face_detector()
 
-path = os.getcwd() + '/fitzen_backend/shape_predictor_68_face_landmarks.dat'
-eye_landmark_predictor = dlib.shape_predictor(path)
+eye_landmark_predictor = dlib.shape_predictor(
 
+    "shape_predictor_68_face_landmarks.dat")
 
+# initializing the counter for the number of blinks
+counter = 0
 blink_count = 0
 total_blink_count = 0
+eye_strain_level = 0
 
 # main export function
 
 
 def detect_blinks(frame):
 
-    global blink_count, total_blink_count
+    global blink_count
+    global total_blink_count
+    global eye_strain_level
 
     blink_dict = {}
 
-    eye_strain_level = 0
     faces = face_detector(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))
 
     for face in faces:
@@ -55,10 +53,12 @@ def detect_blinks(frame):
             print(blink_count, "blink detected")
 
     if (time_interval_passed()):
-        if (blink_count < 9):
+        if (blink_count < 8):
             # print("Alert!")
             # print("You have blinked less than 10 times in 10 seconds")
             eye_strain_level = 1
+        else:
+            eye_strain_level = 0
         blink_count = 0
 
     blink_dict = {'blink_count': blink_count,
@@ -126,7 +126,7 @@ def time_interval_passed():
     seconds_passed = time_delta.total_seconds()
 
     # Check if 30 second  interval has passed
-    if (seconds_passed >= 30):
+    if (seconds_passed >= 10):
         start_time = datetime.datetime.now()
         return True
 

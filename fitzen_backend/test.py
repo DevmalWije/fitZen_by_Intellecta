@@ -14,18 +14,19 @@ while cap.isOpened():
     # cv2.imshow('g', dict['image_frame'])
 
     # test for blink detection
-    # dict = blink_detection.detect_blinks(frame)
+    dict = blink_detection.detect_blinks(frame)
+    print(dict['eye_strain_level'])
 
-    # try:
-    #     cv2.imshow('g', dict['image_frame'])
-    # except KeyError:
-    #     print("Key 'image_frame' is not present in the dictionary")
-    
-    #depth measurement test
-    dict= FaceDepthMeasurement.start_detection(frame)
-    cv2.imshow('g', dict['image_frame'])
-    depth_state=dict['depth_state']
-    print(depth_state)
+    try:
+        cv2.imshow('g', dict['image_frame'])
+    except KeyError:
+        print("Key 'image_frame' is not present in the dictionary")
+
+    # #depth measurement test
+    # dict= FaceDepthMeasurement.start_detection(frame)
+    # cv2.imshow('g', dict['image_frame'])
+    # depth_state=dict['depth_state']
+    # print(depth_state)
 
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
