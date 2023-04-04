@@ -50,7 +50,8 @@ class UserController {
       _authService.signOut();
     } finally {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.clear();
+      prefs.remove('idToken');
+      prefs.remove('uid');
     }
   }
 

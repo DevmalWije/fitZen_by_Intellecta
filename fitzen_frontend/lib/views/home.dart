@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:fitzen_frontend/widgets/button.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:skeletons/skeletons.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class _HomeState extends State<Home> {
 
   getUserData() async {
     userData = await Provider.of<UserController>(context, listen: false).fetchData(context);
-    if(mounted){
+    if (mounted) {
       setState(() {});
     }
   }
@@ -89,7 +90,7 @@ class _HomeState extends State<Home> {
                 Expanded(
                   child: SummaryCard(
                     title: "Total Screen Time",
-                    value: userData?.getTimeString(userData?.totalElapsedSeconds ?? 0) ?? "N/A",
+                    value: userData?.getTimeString(userData?.totalElapsedSeconds ?? 0) ?? "",
                     color: kBlue,
                   ),
                 ),
@@ -154,34 +155,43 @@ class _HomeState extends State<Home> {
                                 child: Row(
                                   children: [
                                     Expanded(
-                                      child: PieChart(
-                                        dataMap: {
-                                          "Good": (userData?.goodPostureCount ?? 0).toDouble(),
-                                          "Bad": (userData?.badPostureCount ?? 0).toDouble(),
-                                        },
-                                        animationDuration: Duration(milliseconds: 800),
-                                        chartLegendSpacing: 40,
-                                        colorList: [kGreen, kRed],
-                                        chartType: ChartType.ring,
-                                        ringStrokeWidth: 30,
-                                        centerText: "Posture",
-                                        legendOptions: LegendOptions(
-                                          showLegendsInRow: false,
-                                          legendPosition: LegendPosition.right,
-                                          showLegends: true,
-                                          legendShape: BoxShape.circle,
-                                          legendTextStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        chartValuesOptions: ChartValuesOptions(
-                                          showChartValueBackground: false,
-                                          showChartValues: true,
-                                          showChartValuesInPercentage: true,
-                                          showChartValuesOutside: false,
-                                          decimalPlaces: 1,
-                                        ),
-                                      ),
+                                      child: userData == null
+                                          ? SkeletonAvatar(
+                                              style: SkeletonAvatarStyle(
+                                                shape: BoxShape.circle,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                            )
+                                          : PieChart(
+                                              dataMap: {
+                                                "Good":
+                                                    (userData?.goodPostureCount ?? 0).toDouble(),
+                                                "Bad": (userData?.badPostureCount ?? 0).toDouble(),
+                                              },
+                                              animationDuration: Duration(milliseconds: 800),
+                                              chartLegendSpacing: 40,
+                                              colorList: [kGreen, kRed],
+                                              chartType: ChartType.ring,
+                                              ringStrokeWidth: 25,
+                                              centerText: "Posture",
+                                              legendOptions: LegendOptions(
+                                                showLegendsInRow: false,
+                                                legendPosition: LegendPosition.right,
+                                                showLegends: true,
+                                                legendShape: BoxShape.circle,
+                                                legendTextStyle: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              chartValuesOptions: ChartValuesOptions(
+                                                showChartValueBackground: false,
+                                                showChartValues: true,
+                                                showChartValuesInPercentage: true,
+                                                showChartValuesOutside: false,
+                                                decimalPlaces: 1,
+                                              ),
+                                            ),
                                     ),
                                     SizedBox(width: 25),
                                     Expanded(
@@ -193,7 +203,7 @@ class _HomeState extends State<Home> {
                                             title: "Screen Time",
                                             value: userData?.getTimeString(
                                                     userData?.elapsedSeconds ?? 0) ??
-                                                "N/A",
+                                                "",
                                             color: kBlue,
                                             padding: EdgeInsets.all(10),
                                             titleSize: 18,
@@ -203,7 +213,7 @@ class _HomeState extends State<Home> {
                                           SizedBox(height: 10),
                                           SummaryCard(
                                             title: "Eye Strain Level",
-                                            value: userData?.eyeStrainLevel ?? "N/A",
+                                            value: userData?.eyeStrainLevel ?? "",
                                             color: kGreen,
                                             padding: EdgeInsets.all(10),
                                             titleSize: 18,

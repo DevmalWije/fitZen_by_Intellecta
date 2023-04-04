@@ -47,6 +47,7 @@ dependencies:
   local_notifier: ^0.1.5
   pausable_timer: ^1.0.0+7
   pie_chart: ^5.3.2
+  skeletons: ^0.0.3
 
 dev_dependencies:
   flutter_test:
