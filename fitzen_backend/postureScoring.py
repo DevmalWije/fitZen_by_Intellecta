@@ -25,4 +25,4 @@ def calculate_posture_score(good_posture_count, bad_posture_count, session_durat
         bad_posture_count + 5 * (good_posture_count // 30)
 
     # Return the posture score
-    return posture_score
+    return int(good_posture_count), int(bad_posture_count)
