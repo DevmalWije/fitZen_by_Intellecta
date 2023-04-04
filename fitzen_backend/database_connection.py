@@ -14,22 +14,11 @@ async def validateUser(request):
         decoded_token = auth.verify_id_token(token)
         uid = decoded_token['uid']
 
-        #fetching data from db
-        doc = db.collection('users').document(uid).get()
-        previous_session = db.collection("users").document(uid).collection("sessions").order_by("timestamp").limit(1).get()
-        print(previous_session)
-        user_data = {}
-        if doc.exists:
-            user_data = doc.to_dict()
-        else:
-            user_data = {}
-        
         return web.Response(
             content_type="application/json",
             status=200,
             text=json.dumps({
                 "uid": str(uid),
-                "user_data": user_data,    
             }),
         )
     except Exception as e:

@@ -15,5 +15,5 @@ const POOR_POSTURE_KEY = "poorPostureNotification";
 const LOW_BLINK_COUNT_KEY = "lowBlinkNotification";
 const TWENTY_TWENTY_TWENTY_KEY = "lowBlinkNotification";
 
-const API = "http://localhost:3000";
-// const API = "http://143.198.80.241:3000";
+const API = "http://localhost:3000/api";
+// const API = "https://fitzen.tech";
