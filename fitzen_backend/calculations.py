@@ -5,7 +5,7 @@ def calculate_posture_score(good_posture_count, bad_posture_count, session_durat
     Args:
         good_posture_count (int): The count of good posture detections.
         bad_posture_count (int): The count of bad posture detections.
-        session_duration (int): The total duration of the session, in minutes.
+        session_duration (int): The total duration of the session in seconds.
 
     Returns:
         int: The posture score, based on the count and frequency of good and bad posture.
@@ -32,6 +32,9 @@ def calculate_posture_score(good_posture_count, bad_posture_count, session_durat
     # Adjust the posture score to be on the same scale as the blink score
     posture_score = posture_score - 3 + 5 * (posture_score // 6)
 
+    # Adjust the posture score based on session duration
+    posture_score = posture_score / session_duration * 60
+
     # Return the posture score
     return posture_score
 
@@ -42,7 +45,7 @@ def calculate_blink_score(blink_count, session_duration):
 
     Args:
         blink_count (int): The number of times the user has blinked during the session.
-        session_duration (int): The total duration of the session, in minutes.
+        session_duration (int): The total duration of the session, in seconds.
 
     Returns:
         int: The blink score, based on the count and frequency of blinks.
@@ -54,7 +57,7 @@ def calculate_blink_score(blink_count, session_duration):
             "blink_count and session_duration must be greater than zero")
 
     # Calculate the blink rate (blinks per minute)
-    blink_rate = blink_count / session_duration
+    blink_rate = blink_count / (session_duration/60)
 
     # Assign a score to the user's blinking behavior based on the blink rate
     if blink_rate >= 20:
