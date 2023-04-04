@@ -1,21 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-        home: Scaffold(
-      body: VideoPlayerPage(),
-    ));
-  }
-}
+// import 'package:video_player/video_player.dart';
 
 class VideoPlayerPage extends StatefulWidget {
   const VideoPlayerPage({super.key});
@@ -25,9 +9,9 @@ class VideoPlayerPage extends StatefulWidget {
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
-  late VideoPlayerController controller;
+  // late VideoPlayerController controller;
   bool isPlaying = true;
-  
+
   // Routine 1 video list
   final List<String> videoLinks1 = [
     'intro.mp4',
@@ -36,6 +20,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     'R1_ex3.mp4',
     'R1_ex4.mp4',
   ];
+
   // Routine 1 Exercise names list
   final List<String> videoNames1 = [
     'introduction',
@@ -44,6 +29,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     'Exercise 3: Stand and Reach (5-10 reaches each side, pause at the end position)',
     'Exercise 4: Wall slides with chin nod (2 sets of 10-15 reps)',
   ];
+
   // Routine 2 video list
   final List<String> videoLinks2 = [
     'R2_ex1.mp4',
@@ -51,6 +37,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     'R2_ex3.mp4',
     'R2_ex4.mp4',
   ];
+
   // Routine 2 Exercise names list
   final List<String> videoNames2 = [
     'Exercise 1: Quadruped Thoracic Rotations (10 reps each side with pause at top)',
@@ -62,15 +49,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.asset('assets/videos/${videoLinks1[0]}')   // accessing the videos from the video lists
-      ..initialize().then((_) {
-        setState(() {});
-      });
+    // controller = VideoPlayerController.asset(
+    //     'assets/videos/${videoLinks1[0]}') // accessing the videos from the video lists
+    //   ..initialize().then((_) {
+    //     setState(() {});
+    //   });
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    // controller.dispose();
     super.dispose();
   }
 
@@ -80,15 +68,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SizedBox(
-          height:
-              400, // wrapped the aspect ratio in a sized box to set the height of the video
+          height: 400, // wrapped the aspect ratio in a sized box to set the height of the video
           child: Center(
             child: AspectRatio(
               aspectRatio: 16 / 9,
-              child: Stack(  // adding the playpause button
+              child: Stack(
+                // adding the playpause button
                 alignment: Alignment.bottomCenter,
                 children: [
-                  VideoPlayer(controller),
+                  // VideoPlayer(controller),
                   IconButton(
                     icon: Icon(
                       isPlaying ? Icons.pause : Icons.play_arrow,
@@ -97,9 +85,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     onPressed: () {
                       setState(() {
                         if (isPlaying) {
-                          controller.pause();
+                          // controller.pause();
                         } else {
-                          controller.play();
+                          // controller.play();
                         }
                         isPlaying = !isPlaying;
                       });
@@ -110,29 +98,31 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             ),
           ),
         ),
-        const SizedBox(height: 20),   // adding a small gap between the 2 routines with a empty SizedBox
+        const SizedBox(height: 20),
+        // adding a small gap between the 2 routines with a empty SizedBox
 
         // ----------------------------------
-        const Text(   // first routine heading
+        const Text(
+          // first routine heading
           'Routine 1',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
-        Expanded(  // looping through the link list 1 and accessing the videos after clicked
+        Expanded(
+          // looping through the link list 1 and accessing the videos after clicked
           child: ListView.builder(
             itemCount: videoLinks1.length,
             itemBuilder: (BuildContext context, int index) {
               return InkWell(
                 onTap: () {
-                  controller.pause();
-                  controller = VideoPlayerController.asset(
-                      'assets/videos/${videoLinks1[index]}')
-                    ..initialize().then((_) {
-                      setState(() {});
-                      controller.play();
-                    });
+                  // controller.pause();
+                  // controller = VideoPlayerController.asset('assets/videos/${videoLinks1[index]}')
+                  //   ..initialize().then((_) {
+                  //     setState(() {});
+                  //     controller.play();
+                  //   });
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),
@@ -153,26 +143,27 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         // ),
         const SizedBox(height: 20),
         // ---------------------------------------
-        const Text(  // second routine heading
+        const Text(
+          // second routine heading
           'Routine 2',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
-        Expanded(  // looping through the link list 2 and accessing the videos after clicked
+        Expanded(
+          // looping through the link list 2 and accessing the videos after clicked
           child: ListView.builder(
             itemCount: videoLinks2.length,
             itemBuilder: (BuildContext context, int index) {
               return InkWell(
                 onTap: () {
-                  controller.pause();
-                  controller = VideoPlayerController.asset(
-                      'assets/videos/${videoLinks2[index]}')
-                    ..initialize().then((_) {
-                      setState(() {});
-                      controller.play();
-                    });
+                  // controller.pause();
+                  // controller = VideoPlayerController.asset('assets/videos/${videoLinks2[index]}')
+                  //   ..initialize().then((_) {
+                  //     setState(() {});
+                  //     controller.play();
+                  //   });
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),

@@ -1,6 +1,7 @@
 import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/controllers/user_controller.dart';
 import 'package:fitzen_frontend/models/user_data.dart';
+import 'package:fitzen_frontend/views/ExerciseRec.dart';
 import 'package:fitzen_frontend/views/login.dart';
 import 'package:fitzen_frontend/views/settings.dart';
 import 'package:fitzen_frontend/views/tracking_screen.dart';
@@ -276,7 +277,10 @@ class _HomeState extends State<Home> {
                                     ),
                                     SizedBox(height: 10),
                                     TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(context,
+                                            CupertinoPageRoute(builder: (_) => VideoPlayerPage()));
+                                      },
                                       style: TextButton.styleFrom(
                                         foregroundColor: kYellow,
                                         textStyle: GoogleFonts.dmSans(
