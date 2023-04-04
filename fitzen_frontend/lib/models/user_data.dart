@@ -1,6 +1,6 @@
 class UserData {
   final int totalElapsedSeconds;
-  final int totalBadPosturePercentage;
+  final double totalBadPosturePercentage;
   final int score;
   final int goodPostureCount;
   final int badPostureCount;
@@ -13,7 +13,7 @@ class UserData {
   factory UserData.fromJson(Map json) {
     return UserData(
       json['totalElapsedSeconds'],
-      json['totalBadPosturePercentage'],
+      json['totalBadPosturePercentage'] / 1.0,
       json['score'],
       json['goodPostureCount'],
       json['badPostureCount'],

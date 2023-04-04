@@ -105,10 +105,15 @@ class _HomeState extends State<Home> {
                 ),
                 SizedBox(width: 35),
                 Expanded(
-                  child: SummaryCard(
-                    title: "Overall Score",
-                    value: (userData?.score ?? 0).toString(),
-                    color: kYellow,
+                  child: Tooltip(
+                    message: "Higher is better",
+                    verticalOffset: 80,
+                    waitDuration: Duration(milliseconds: 500),
+                    child: SummaryCard(
+                      title: "Overall Score",
+                      value: (userData?.score ?? 0).toString(),
+                      color: kYellow,
+                    ),
                   ),
                 ),
               ],
@@ -212,14 +217,19 @@ class _HomeState extends State<Home> {
                                             borderRadius: 10,
                                           ),
                                           SizedBox(height: 10),
-                                          SummaryCard(
-                                            title: "Blink Score",
-                                            value: userData?.blinkScore.toString() ?? "0",
-                                            color: kGreen,
-                                            padding: EdgeInsets.all(10),
-                                            titleSize: 18,
-                                            valueSize: 28,
-                                            borderRadius: 10,
+                                          Tooltip(
+                                            message: "Higher is better",
+                                            verticalOffset: 40,
+                                            waitDuration: Duration(milliseconds: 500),
+                                            child: SummaryCard(
+                                              title: "Blink Score",
+                                              value: userData?.blinkScore.toString() ?? "0",
+                                              color: kGreen,
+                                              padding: EdgeInsets.all(10),
+                                              titleSize: 18,
+                                              valueSize: 28,
+                                              borderRadius: 10,
+                                            ),
                                           ),
                                         ],
                                       ),

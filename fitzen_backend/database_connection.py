@@ -49,8 +49,8 @@ def getSessions(request):
             status=200,
             text=json.dumps({
                 "totalElapsedSeconds": user_data.get("elapsedSeconds", 0),
-                "totalBadPosturePercentage": 0 if user_data == {} else calculations.calculate_posture_percentage(user_data["goodPostureCount"], user_data["badPostureCount"]),
-                "score": user_data.get("score", 0),
+                "totalBadPosturePercentage": 0 if user_data == {} else calculations.calculate_posture_percentage(user_data["goodPostureCount"], user_data["badPostureCount"])[1],
+                "score": 0 if user_data == {} else calculations.calculate_posture_score(user_data["goodPostureCount"], user_data["badPostureCount"], user_data["elapsedSeconds"]),
                 "goodPostureCount": previous_session.get("goodPostureCount", 0),
                 "badPostureCount": previous_session.get("badPostureCount", 0),
                 "eyeStrainLevel": 0 if (len(previous_session_doc) == 0) else calculations.calculate_blink_score(previous_session["blinkCount"], previous_session["elapsedSeconds"]),
@@ -79,14 +79,12 @@ async def addSession(request):
                 "elapsedSeconds": firestore.Increment(data['elapsedSeconds']),
                 "badPostureCount": firestore.Increment(data['badPostureCount']),
                 "goodPostureCount": firestore.Increment(data['goodPostureCount']),
-                "score": calculations.calculate_posture_score(data["goodPostureCount"] + doc_data["goodPostureCount"], data["badPostureCount"] + doc_data["badPostureCount"], data["elapsedSeconds"] + doc_data["elapsedSeconds"])
             })
         else:
             db.collection("users").document(data['uid']).set({
                 "elapsedSeconds": data["elapsedSeconds"],
                 "badPostureCount": data["badPostureCount"],
                 "goodPostureCount": data["goodPostureCount"],
-                "score": calculations.calculate_posture_score(data["goodPostureCount"], data["badPostureCount"], data["elapsedSeconds"])
             })
             
         data['timestamp'] = firestore.SERVER_TIMESTAMP
