@@ -213,8 +213,8 @@ class _HomeState extends State<Home> {
                                           ),
                                           SizedBox(height: 10),
                                           SummaryCard(
-                                            title: "Eye Strain Level",
-                                            value: userData?.eyeStrainLevel ?? "",
+                                            title: "Blink Score",
+                                            value: userData?.blinkScore.toString() ?? "0",
                                             color: kGreen,
                                             padding: EdgeInsets.all(10),
                                             titleSize: 18,

@@ -4,11 +4,11 @@ class UserData {
   final int score;
   final int goodPostureCount;
   final int badPostureCount;
-  final String eyeStrainLevel;
+  final int blinkScore;
   final int elapsedSeconds;
 
   UserData(this.totalElapsedSeconds, this.totalBadPosturePercentage, this.score,
-      this.goodPostureCount, this.badPostureCount, this.eyeStrainLevel, this.elapsedSeconds);
+      this.goodPostureCount, this.badPostureCount, this.blinkScore, this.elapsedSeconds);
 
   factory UserData.fromJson(Map json) {
     return UserData(
