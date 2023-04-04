@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 import dlib
-
+import os
 from math import hypot
 import datetime
 
@@ -17,9 +17,8 @@ start_time = datetime.datetime.now()
 
 face_detector = dlib.get_frontal_face_detector()
 
-eye_landmark_predictor = dlib.shape_predictor(
-
-    "shape_predictor_68_face_landmarks.dat")
+path = os.getcwd() + '/fitzen_backend/shape_predictor_68_face_landmarks.dat'
+eye_landmark_predictor = dlib.shape_predictor(path)
 
 
 blink_count = 0
@@ -78,32 +77,37 @@ font = cv2.FONT_HERSHEY_PLAIN
 
 
 def get_ratio_of_blinking(frame, points_of_eye, facila_landmarks):
-    # to get the left and right point of an eye to draw a horizontal line
-    left_point = (facila_landmarks.part(
-        points_of_eye[0]).x, facila_landmarks.part(points_of_eye[0]).y)
-    right_point = (facila_landmarks.part(
-        points_of_eye[3]).x, facila_landmarks.part(points_of_eye[3]).y)
+    try:
+        # to get the left and right point of an eye to draw a horizontal line
+        left_point = (facila_landmarks.part(
+            points_of_eye[0]).x, facila_landmarks.part(points_of_eye[0]).y)
+        right_point = (facila_landmarks.part(
+            points_of_eye[3]).x, facila_landmarks.part(points_of_eye[3]).y)
 
-    # to get the top and bottom 2 points to find the mid point of them
-    top_center = mid_point(facila_landmarks.part(
-        points_of_eye[1]), facila_landmarks.part(points_of_eye[2]))
-    bottom_center = mid_point(facila_landmarks.part(
-        points_of_eye[5]), facila_landmarks.part(points_of_eye[4]))
+        # to get the top and bottom 2 points to find the mid point of them
+        top_center = mid_point(facila_landmarks.part(
+            points_of_eye[1]), facila_landmarks.part(points_of_eye[2]))
+        bottom_center = mid_point(facila_landmarks.part(
+            points_of_eye[5]), facila_landmarks.part(points_of_eye[4]))
 
-    # to draw the horizontal line in an eye
-    horizontal_line = cv2.line(frame, left_point, right_point, (0, 255, 0), 2)
+        # to draw the horizontal line in an eye
+        horizontal_line = cv2.line(frame, left_point, right_point, (0, 255, 0), 2)
 
-    # to vertical line in eye
-    vertical_line = cv2.line(frame, top_center, bottom_center, (0, 255, 0), 2)
+        # to vertical line in eye
+        vertical_line = cv2.line(frame, top_center, bottom_center, (0, 255, 0), 2)
 
-    length_of_ver_line = hypot(
-        (top_center[0] - bottom_center[0]), (top_center[1] - bottom_center[1]))
+        length_of_ver_line = hypot(
+            (top_center[0] - bottom_center[0]), (top_center[1] - bottom_center[1]))
 
-    length_of_hor_line = hypot(
-        (left_point[0] - right_point[0]), (left_point[1] - right_point[1]))
+        length_of_hor_line = hypot(
+            (left_point[0] - right_point[0]), (left_point[1] - right_point[1]))
 
-    EAR = length_of_hor_line/length_of_ver_line
-    return EAR
+        EAR = length_of_hor_line/length_of_ver_line
+        return EAR
+    except AttributeError:
+        print('Invalid Parameters')
+    except Exception:
+        raise RuntimeError
 
 
 def test_get_ratio_of_blinking():
