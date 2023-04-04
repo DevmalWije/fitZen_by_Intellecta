@@ -1,5 +1,6 @@
 import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/controllers/user_controller.dart';
+import 'package:fitzen_frontend/models/user_data.dart';
 import 'package:fitzen_frontend/views/login.dart';
 import 'package:fitzen_frontend/views/settings.dart';
 import 'package:fitzen_frontend/views/tracking_screen.dart';
@@ -19,11 +20,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  UserData? userData;
 
   @override
   void initState() {
     super.initState();
-    Provider.of<UserController>(context, listen: false).fetchData(context);
+    getUserData();
+  }
+
+  getUserData() async {
+    userData = await Provider.of<UserController>(context, listen: false).fetchData(context);
+    if(mounted){
+      setState(() {});
+    }
   }
 
   @override
@@ -80,23 +89,23 @@ class _HomeState extends State<Home> {
                 Expanded(
                   child: SummaryCard(
                     title: "Total Screen Time",
-                    value: "5hrs 30mins",
+                    value: userData?.getTimeString(userData?.totalElapsedSeconds ?? 0) ?? "N/A",
                     color: kBlue,
                   ),
                 ),
                 SizedBox(width: 35),
                 Expanded(
                   child: SummaryCard(
-                    title: "Poor Postures",
-                    value: "15",
+                    title: "Poor Posture Percentage",
+                    value: "${userData?.totalBadPosturePercentage ?? 0}%",
                     color: kRed,
                   ),
                 ),
                 SizedBox(width: 35),
                 Expanded(
                   child: SummaryCard(
-                    title: "Time till last break",
-                    value: "23 mins",
+                    title: "Overall Score",
+                    value: (userData?.score ?? 0).toString(),
                     color: kYellow,
                   ),
                 ),
@@ -146,7 +155,10 @@ class _HomeState extends State<Home> {
                                   children: [
                                     Expanded(
                                       child: PieChart(
-                                        dataMap: {"Good": 25, "Bad": 75},
+                                        dataMap: {
+                                          "Good": (userData?.goodPostureCount ?? 0).toDouble(),
+                                          "Bad": (userData?.badPostureCount ?? 0).toDouble(),
+                                        },
                                         animationDuration: Duration(milliseconds: 800),
                                         chartLegendSpacing: 40,
                                         colorList: [kGreen, kRed],
@@ -179,7 +191,9 @@ class _HomeState extends State<Home> {
                                         children: [
                                           SummaryCard(
                                             title: "Screen Time",
-                                            value: "1hr 00mins",
+                                            value: userData?.getTimeString(
+                                                    userData?.elapsedSeconds ?? 0) ??
+                                                "N/A",
                                             color: kBlue,
                                             padding: EdgeInsets.all(10),
                                             titleSize: 18,
@@ -189,7 +203,7 @@ class _HomeState extends State<Home> {
                                           SizedBox(height: 10),
                                           SummaryCard(
                                             title: "Eye Strain Level",
-                                            value: "Good",
+                                            value: userData?.eyeStrainLevel ?? "N/A",
                                             color: kGreen,
                                             padding: EdgeInsets.all(10),
                                             titleSize: 18,
@@ -221,7 +235,10 @@ class _HomeState extends State<Home> {
                             child: Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(color: kYellow, width: 2,),
+                                side: BorderSide(
+                                  color: kYellow,
+                                  width: 2,
+                                ),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(15),

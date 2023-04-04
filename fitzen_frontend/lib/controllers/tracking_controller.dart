@@ -300,7 +300,7 @@ class TrackingController extends ChangeNotifier {
     APIService apiService = APIService();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String uid = preferences.getString("uid")!;
-    await apiService.sendPOSTRequest('add-session', {
+    await apiService.sendPOSTRequest('sessions/add', {
       'elapsedSeconds': session.elapsedSeconds,
       'blinkCount': session.blinkCount,
       'goodPostureCount': session.goodPostureCount,

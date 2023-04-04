@@ -18,23 +18,17 @@ class APIService {
         return jsonDecode(response.body);
       }
 
+      print("$API/$endpoint");
       String exception = "";
-      bool isLogout = false;
       try {
         exception = jsonDecode(response.body)['error'];
-        isLogout = true;
       } catch (e) {
         exception = response.body;
       }
 
-      throw HttpException(exception, logout: isLogout);
+      throw HttpException(exception);
     } catch (e) {
-      if (e is HttpException) {
-        if (onError != null) onError(e.message, e.logout);
-        return null;
-      }
-
-      if (onError != null) onError(e.toString(), false);
+      if (onError != null) onError(e.toString());
       return null;
     }
   }
@@ -75,9 +69,7 @@ Future<Map?> sendPOSTRequest(String endpoint, Map<String, dynamic> body,
 
 class HttpException implements Exception {
   final String message;
-  final bool logout;
-
-  HttpException(this.message, {this.logout = false});
+  HttpException(this.message);
 
   @override
   String toString() {

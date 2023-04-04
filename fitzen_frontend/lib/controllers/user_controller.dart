@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firedart/auth/user_gateway.dart';
 import 'package:fitzen_frontend/constants.dart';
+import 'package:fitzen_frontend/models/user_data.dart';
 import 'package:fitzen_frontend/services/api_service.dart';
 import 'package:fitzen_frontend/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,27 +57,22 @@ class UserController {
 
   //database
 
-  fetchData(BuildContext context) async {
-    Map? result = await _apiService.sendGETRequest("validate", onError: (e, logout) async {
-      if(e.toString().toLowerCase().contains("too early")){
-        await Future.delayed(Duration(seconds: 3));
-        await fetchData(context);
-        return;
-      }
+  Future<UserData?> fetchData(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString("uid") ?? "";
 
+    Map? result = await _apiService.sendGETRequest("sessions?uid=$uid", onError: (e) async {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e),
         backgroundColor: Colors.red,
       ));
-      if(logout){
-        signOut();
-        Navigator.of(context).pushAndRemoveUntil(
-            CupertinoPageRoute(builder: (context) => Login()),
-                (Route<dynamic> route) => false);
-      }
     });
 
+    if(result != null){
+      UserData userData = UserData.fromJson(result);
+      return userData;
+    }
 
-    print(result);
+    return null;
   }
 }
