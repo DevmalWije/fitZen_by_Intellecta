@@ -29,13 +29,28 @@ class VideoTransformTrack(MediaStreamTrack):
         # print(blink_dict["eye_strain_level"])
 
         if VideoTransformTrack.channel != None:
-            VideoTransformTrack.channel.send(json.dumps({
-                'posture': dict['posture_class'],
-                'good_posture_count': dict['good_posture_count'],
-                'bad_posture_count': dict['bad_posture_count'],
-                'total_blink_count': blink_dict['total_blink_count'],
-                'eye_strain': blink_dict["eye_strain_level"]
-            }))
+            posture_count = 0
+            last_posture = ""
+            while True:
+                # getting the current posture
+                current_posture = dict['posture_class']
+                # checking if the posture is same as the last posture
+                if current_posture != last_posture:
+                    posture_count = 0
+                    last_posture = current_posture
+                else:
+                    posture_count += 1
+                # if the posture is same for 10 frames then send the posture to the client
+                if posture_count >= 10:
+                    posture_count = 0
+                    VideoTransformTrack.channel.send(json.dumps({
+                        'posture': dict['posture_class'],
+                        'good_posture_count': dict['good_posture_count'],
+                        'bad_posture_count': dict['bad_posture_count'],
+                        'total_blink_count': blink_dict['total_blink_count'],
+                        'eye_`strain': blink_dict["eye_strain_level"]
+                    }))
+                    break
 
         new_frame = VideoFrame.from_ndarray(dict['image_frame'], format="rgb24")
         new_frame.pts = frame.pts

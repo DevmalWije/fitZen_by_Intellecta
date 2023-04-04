@@ -16,4 +16,4 @@ const LOW_BLINK_COUNT_KEY = "lowBlinkNotification";
 const TWENTY_TWENTY_TWENTY_KEY = "lowBlinkNotification";
 
 const API = "http://localhost:3000/api";
-// const API = "https://fitzen.tech";
+// const API = "https://fitzen.tech/api";
