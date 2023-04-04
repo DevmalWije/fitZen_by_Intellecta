@@ -87,10 +87,10 @@ async def image_frame_model(frame):
 
         # getting count of good postures and bad postures from the posture list
 
-        good_posture_count = 1
+        good_posture_count:int = 1
         good_posture_count = posture_list.count('proper_posture')
 
-        bad_posture_count = 1
+        bad_posture_count:int = 1
         bad_posture_count = posture_list.count('bad_posture')
 
         # adding the posture class and image frame to a dictionary
