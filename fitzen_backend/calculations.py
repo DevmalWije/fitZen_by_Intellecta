@@ -13,8 +13,9 @@ def calculate_posture_score(good_posture_count, bad_posture_count, session_durat
 
     # Check if the passed parameters are greater than zero
     if good_posture_count <= 0 or bad_posture_count <= 0 or session_duration <= 0:
-        raise ValueError(
-            "good_posture_count, bad_posture_count, and session_duration must be greater than zero")
+        return 0
+        # raise ValueError(
+        #     "good_posture_count, bad_posture_count, and session_duration must be greater than zero")
 
     # Calculate the total posture count
     posture_count = good_posture_count + bad_posture_count
@@ -36,7 +37,7 @@ def calculate_posture_score(good_posture_count, bad_posture_count, session_durat
     posture_score = posture_score / session_duration * 60
 
     # Return the posture score
-    return posture_score
+    return int(posture_score)
 
 
 def calculate_blink_score(blink_count, session_duration):
@@ -53,8 +54,9 @@ def calculate_blink_score(blink_count, session_duration):
 
     # Check if the passed parameters are greater than zero
     if blink_count <= 0 or session_duration <= 0:
-        raise ValueError(
-            "blink_count and session_duration must be greater than zero")
+        return 0
+        # raise ValueError(
+        #     "blink_count and session_duration must be greater than zero")
 
     # Calculate the blink rate (blinks per minute)
     blink_rate = blink_count / (session_duration/60)
@@ -72,33 +74,29 @@ def calculate_blink_score(blink_count, session_duration):
     # Adjust the blink score to be on the same scale as the posture score
     blink_score = blink_score - 3 + 5 * (blink_score // 6)
 
-    return blink_score
+    return int(blink_score)
 
 
-def calculate_posture_percentage(past_good_postures, past_bad_postures, current_good_postures, current_bad_postures):
+def calculate_posture_percentage(good_postures,bad_postures):
     """
-    Calculates the percentage of good and bad postures based on the total number of good and bad postures from all past sessions and the current session.
+    Calculates the percentage of good and bad postures based on the total number of good and bad postures.
 
     Args:
-        past_good_postures (int): The total number of good postures detected in all past sessions.
-        past_bad_postures (int): The total number of bad postures detected in all past sessions.
-        current_good_postures (int): The total number of good postures detected in the current session.
-        current_bad_postures (int): The total number of bad postures detected in the current session.
+        good_postures (int): The total number of good postures detected in all sessions.
+        bad_postures (int): The total number of bad postures detected in all sessions.
 
     Returns:
         tuple: A tuple containing the percentage of good postures and the percentage of bad postures.
     """
 
     # Calculate the total number of good and bad postures
-    total_good_postures = past_good_postures + current_good_postures
-    total_bad_postures = past_bad_postures + current_bad_postures
-    total_postures = total_good_postures + total_bad_postures
+    total_postures = good_postures + bad_postures
 
     # Calculate the percentage of good and bad postures
-    good_posture_percentage = total_good_postures / total_postures * 100
-    bad_posture_percentage = total_bad_postures / total_postures * 100
+    good_posture_percentage = good_postures / total_postures * 100
+    bad_posture_percentage = bad_postures / total_postures * 100
 
     # Return the percentages as a tuple
-    return (good_posture_percentage, bad_posture_percentage)
+    return (round(good_posture_percentage, 2), round(bad_posture_percentage, 2))
     # # Extract the first value in the tuple and assign it to a new variable
     # good_posture_percentage = posture_percentages[0]

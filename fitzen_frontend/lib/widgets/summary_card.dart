@@ -4,8 +4,12 @@ class SummaryCard extends StatelessWidget {
   final String title;
   final String value;
   final Color color;
+  final EdgeInsetsGeometry? padding;
+  final double? titleSize;
+  final double? valueSize;
+  final double? borderRadius;
 
-  const SummaryCard({Key? key, required this.title, required this.value, required this.color})
+  const SummaryCard({Key? key, required this.title, required this.value, required this.color, this.padding, this.titleSize, this.valueSize, this.borderRadius})
       : super(key: key);
 
   @override
@@ -14,20 +18,25 @@ class SummaryCard extends StatelessWidget {
       color: color,
       elevation: 5,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(borderRadius ?? 20),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 42),
+        padding: padding ?? EdgeInsets.symmetric(vertical: 36, horizontal: 42),
         child: Column(
           children: [
             Text(
               value,
-              style: Theme.of(context).textTheme.headline1,
+              style: Theme.of(context).textTheme.headline2!.copyWith(
+                color: Colors.white,
+                fontSize: valueSize
+              ),
               textAlign: TextAlign.center,
             ),
             Text(
               title,
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.caption!.copyWith(
+                fontSize: titleSize,
+              ),
               textAlign: TextAlign.center,
             ),
           ],

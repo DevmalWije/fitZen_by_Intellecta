@@ -7,6 +7,7 @@ import os
 import pickle
 import warnings
 import datetime
+import datetime
 
 # drawing utilities
 mp_drawing = mp.solutions.drawing_utils
@@ -24,7 +25,9 @@ holistic = mp.solutions.holistic.Holistic(
 # creating a scaler object for standardization
 warnings.filterwarnings('ignore')
 X = [[0, 1], [1, 0]]
+X = [[0, 1], [1, 0]]
 scaler = StandardScaler()
+scaler.fit(X)
 scaler.fit(X)
 
 

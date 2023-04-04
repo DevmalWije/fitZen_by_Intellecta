@@ -23,14 +23,14 @@ eye_landmark_predictor = dlib.shape_predictor(
 
 
 blink_count = 0
-
+total_blink_count = 0
 
 # main export function
 
 
 def detect_blinks(frame):
 
-    global blink_count
+    global blink_count, total_blink_count
 
     blink_dict = {}
 
@@ -52,6 +52,7 @@ def detect_blinks(frame):
 
         if EAR > 5.0:
             blink_count += 1
+            total_blink_count += 1
             print(blink_count, "blink detected")
 
     if (time_interval_passed()):
@@ -62,7 +63,7 @@ def detect_blinks(frame):
         blink_count = 0
 
     blink_dict = {'blink_count': blink_count,
-                  'image_frame': frame, 'eye_strain_level': eye_strain_level}
+                  'image_frame': frame, 'eye_strain_level': eye_strain_level, 'total_blink_count': total_blink_count}
 
     return blink_dict
 
