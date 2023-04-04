@@ -297,6 +297,7 @@ class _HomeState extends State<Home> {
                           SizedBox(
                             width: double.infinity,
                             child: Button(
+                              isLoading: userData == null,
                               text: "Start Tracking",
                               icon: Icons.timer_outlined,
                               backgroundColor: kGreen,
