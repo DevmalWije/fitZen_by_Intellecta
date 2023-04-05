@@ -20,5 +20,9 @@ jobs:
           key: ${{ secrets.CD }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            # Your SSH commands go here
-            echo "Hello, Droplet!"
+            cd /var/www/fitZen_by_Intellecta/
+            git remote set-url origin https://dnadawa:${{ secrets.TOKEN }}@github.com/DevmalWije/fitZen_by_Intellecta.git
+            git stash
+            git pull
+            pm2 stop app
+            pm2 start app
