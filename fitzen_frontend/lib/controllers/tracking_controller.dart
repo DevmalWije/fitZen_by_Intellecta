@@ -111,7 +111,7 @@ class TrackingController extends ChangeNotifier {
               _elapsedSeconds++;
 
               //sending 20-20-20 notification
-              if(settingsController.twentyTwentyTwentyNotification == ON && _elapsedSeconds % (1 * 60) == 0 && _elapsedSeconds != 0){
+              if(settingsController.twentyTwentyTwentyNotification == ON && _elapsedSeconds % (20 * 60) == 0 && _elapsedSeconds != 0){
                 LocalNotification notification = LocalNotification(
                     title: "Take a break!",
                     body: "Please take a 20-second break and look at something 20 feet away to give your eyes"
