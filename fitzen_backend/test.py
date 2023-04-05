@@ -8,12 +8,12 @@ cap = cv2.VideoCapture(0)
 while cap.isOpened():
 
     s, frame = cap.read()
-    # test for main ML model
+    # # test for main ML model
     # dict = optimisedModelImp.image_frame_model(frame)
 
     # cv2.imshow('g', dict['image_frame'])
 
-    # test for blink detection
+    #test for blink detection
     dict = blink_detection.detect_blinks(frame)
     print(dict['eye_strain_level'])
 

@@ -16,7 +16,7 @@ mp_holistic = mp.solutions.holistic
 # class names for when getting data points to csv for training the model
 # WHEN TRAINING FOR A NEW POSE, SWITCH OUT THE CLASSNAMES AND GET INTO
 # THAT RESPECTIVE POSE BEFORE RUNNING THE CODE
-class_name = 'proper_posture'
+# class_name = 'proper_posture'
 # class_name='bad_posture'
 # class_name = 'too_close'
 # class_name = 'looking_away'
@@ -107,13 +107,14 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
 
     num_coords = len(results.pose_landmarks.landmark) + \
         len(results.face_landmarks.landmark)
-    print(num_coords)
+    print("Number of coordinates in the CSV file: ", num_coords, "\n")
 
     landmarks = ['class']
     for val in range(1, num_coords+1):
         landmarks += ['x{}'.format(val), 'y{}'.format(val),
                       'z{}'.format(val), 'v{}'.format(val)]
-    print(landmarks)
+        
+    print("CSV file columns: ", landmarks)
 
     # #Creating new csv file with the landmarks as coloumns
     # with open("coords.csv",mode='w',newline='') as f:

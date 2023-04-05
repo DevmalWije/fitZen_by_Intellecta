@@ -13,16 +13,11 @@ import pickle
 
 
 # reading in the data
-df = pd.read_csv("newCoords-recoverd.csv")
-
-# class names for when getting data points to csv for training the model
-# class_name='proper_posture'
-# class_name='bad_posture'
-# class_name = 'looking_away'
+df = pd.read_csv("coords.csv")
 
 # checking the data
-# print(df.head())
-# print(df.tail())
+print(df.head())
+print(df.tail())
 
 # features
 x = df.drop(['class'], axis=1)
@@ -48,14 +43,18 @@ for algo, pipeline in piplines.items():
     model = pipeline.fit(x_train, y_train)
     fit_models[algo] = model
     print(algo, 'model trained')
-    # print(fit_models[algo].predict(x_test))
-    # print('--------------------------------')
+    print(fit_models[algo].predict(x_test))
+    print('--------------------------------')
 
 # testing the models
 for algo, model in fit_models.items():
     yhat = model.predict(x_test)
     print(algo, accuracy_score(y_test, yhat))
+    print('--------------------------------')
+
 
 # saving the model
-with open("fitzen_backend/randomForest_pose_classifierV2.pkl", "wb") as f:
+with open("randomForest_pose_classifierV2.pkl", "wb") as f:
     pickle.dump(fit_models["rf"], f)
+    print('model saved')
+    print('--------------------------------')

@@ -15,7 +15,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_holistic = mp.solutions.holistic
 
 # loading trained model
-with open("randomForest_pose_classifierV1.pkl", "rb") as f:
+with open("randomForest_pose_classifierV2.pkl", "rb") as f:
     model = pickle.load(f)
 
 # initiating holistic model
@@ -70,7 +70,7 @@ def image_frame_model(frame):
         # Make Detections
         X = pd.DataFrame([row])
         pose_language_class = model.predict(X)[0]
-        # print(pose_language_class)
+        print("Current posture state: ",pose_language_class)
         pose_language_prob = model.predict_proba(X)[0]
         posture_list.append(pose_language_class)
 

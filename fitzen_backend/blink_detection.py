@@ -4,6 +4,13 @@ import dlib
 import os
 from math import hypot
 import datetime
+import sys
+
+# Get the absolute path of the current file
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Join the current directory with the filename to get the absolute path of the file
+model_file = os.path.join(current_dir, "blink_detect_model.dat")
 
 cap = cv2.VideoCapture(0)
 
@@ -11,9 +18,7 @@ start_time = datetime.datetime.now()
 
 face_detector = dlib.get_frontal_face_detector()
 
-eye_landmark_predictor = dlib.shape_predictor(
-
-    "shape_predictor_68_face_landmarks.dat")
+eye_landmark_predictor = dlib.shape_predictor(model_file)
 
 # initializing the counter for the number of blinks
 counter = 0
@@ -91,10 +96,12 @@ def get_ratio_of_blinking(frame, points_of_eye, facila_landmarks):
             points_of_eye[5]), facila_landmarks.part(points_of_eye[4]))
 
         # to draw the horizontal line in an eye
-        horizontal_line = cv2.line(frame, left_point, right_point, (0, 255, 0), 2)
+        horizontal_line = cv2.line(
+            frame, left_point, right_point, (0, 255, 0), 2)
 
         # to vertical line in eye
-        vertical_line = cv2.line(frame, top_center, bottom_center, (0, 255, 0), 2)
+        vertical_line = cv2.line(
+            frame, top_center, bottom_center, (0, 255, 0), 2)
 
         length_of_ver_line = hypot(
             (top_center[0] - bottom_center[0]), (top_center[1] - bottom_center[1]))
@@ -129,41 +136,6 @@ def time_interval_passed():
     if (seconds_passed >= 20):
         start_time = datetime.datetime.now()
         return True
-
-
-# def get_blink_count(frame):
-#     global counter
-#     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-#     faces = face_detector(gray)
-#     for face in faces:
-#         eye_landmarks = eye_landmark_predictor(gray, face)
-
-#         left_eye_ratio = get_ratio_of_blinking(
-#             [36, 37, 38, 39, 40, 41], eye_landmarks)
-#         right_eye_ratio = get_ratio_of_blinking(
-#             [42, 43, 44, 45, 46, 47], eye_landmarks)
-
-#         # getting average ratio of both eye
-#         EAR = (left_eye_ratio + right_eye_ratio)/2
-
-
-#         if EAR < 0.3:
-
-#             counter += 1
-
-
-#     if time_interval_passed():
-
-#         if counter >= 10:
-
-#             print("ALERT!!!")
-
-#         counter = 0
-
-
-#     if cv2.waitKey(10) & 0xFF == ord('q'):
-
-#         cv2.destroyAllWindows()
 
 
 cap.release()
