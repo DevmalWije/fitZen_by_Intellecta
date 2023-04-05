@@ -12,27 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SSH keys
-        env:
-          SSH_PRIVATE_KEY: |
-            ${{ secrets.CD }}
-          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
-          chmod 400 ~/.ssh/id_rsa
-          ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
-          ssh-add - <<< "${SSH_PRIVATE_KEY}" 2>/dev/null
-          echo "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-
       - name: SSH into DigitalOcean droplet
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.IP }}
           username: root
-          key: ~/.ssh/id_rsa
+          key: ${{ secrets.CD }}
           passphrase: ${{ env.SSH_PASSPHRASE }}
-          port: 22
           script: |
             # Your SSH commands go here
             echo "Hello, Droplet!"
