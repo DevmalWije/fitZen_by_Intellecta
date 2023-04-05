@@ -13,38 +13,27 @@ class VideoPlayerPage extends StatefulWidget {
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
   ScrollController scrollController = ScrollController();
   Player player = Player(id: 69420);
-  Media network = Media.network(
-      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4');
   final playlist = Playlist(
     medias: [
-      Media.network('https://www.example.com/music.aac'),
+      Media.network('https://firebasestorage.googleapis.com/v0/b/flash-chat-64d66.appspot.com/o/intro.mp4?alt=media&token=7b39e9eb-2971-4578-9824-f6173a7ac229'),
+      Media.network('https://firebasestorage.googleapis.com/v0/b/flash-chat-64d66.appspot.com/o/R1_ex1.mp4?alt=media&token=abcae931-ddfb-45b7-a9b7-0cbd59fb4b7a'),
+      Media.network('https://firebasestorage.googleapis.com/v0/b/flash-chat-64d66.appspot.com/o/R1_ex2.mp4?alt=media&token=8a18d84e-64dc-46be-90c7-621115177113'),
+      Media.network('https://firebasestorage.googleapis.com/v0/b/flash-chat-64d66.appspot.com/o/R1_ex3.mp4?alt=media&token=2c713e4c-0359-4f04-aad3-89d1091ef2f0'),
+      Media.network('https://firebasestorage.googleapis.com/v0/b/flash-chat-64d66.appspot.com/o/R1_ex4.mp4?alt=media&token=0f84d273-d2b1-434c-8d18-c64593686b96'),
+      Media.network('https://firebasestorage.googleapis.com/v0/b/flash-chat-64d66.appspot.com/o/R2_ex1.mp4?alt=media&token=5b8824ac-905f-4554-bc8f-117fbdff8049'),
+      Media.network('https://firebasestorage.googleapis.com/v0/b/flash-chat-64d66.appspot.com/o/R2_ex2.mp4?alt=media&token=b1ec1293-c83f-44f1-9e91-5a2372835fe2'),
+      Media.network('https://firebasestorage.googleapis.com/v0/b/flash-chat-64d66.appspot.com/o/R2_ex3.mp4?alt=media&token=b6ca76a7-2c29-4988-9fc5-908f1a672ae4'),
+      Media.network('https://firebasestorage.googleapis.com/v0/b/flash-chat-64d66.appspot.com/o/R2_ex4.mp4?alt=media&token=7abcda92-7cb3-4d73-b975-f299456d0038'),
     ],
   );
 
-  // Routine 1 video list
-  final List<String> videoLinks1 = [
-    'intro.mp4',
-    'R1_ex1.mp4',
-    'R1_ex2.mp4',
-    'R1_ex3.mp4',
-    'R1_ex4.mp4',
-  ];
-
   // Routine 1 Exercise names list
   final List<String> videoNames1 = [
-    'introduction',
+    'Introduction',
     'Exercise 1: Over-And-Backs (10-15 slow reps)',
     'Exercise 2: Cobra Pose (5-10 slow reps with pause at top)',
     'Exercise 3: Stand and Reach (5-10 reaches each side, pause at the end position)',
     'Exercise 4: Wall slides with chin nod (2 sets of 10-15 reps)',
-  ];
-
-  // Routine 2 video list
-  final List<String> videoLinks2 = [
-    'R2_ex1.mp4',
-    'R2_ex2.mp4',
-    'R2_ex3.mp4',
-    'R2_ex4.mp4',
   ];
 
   // Routine 2 Exercise names list
@@ -59,7 +48,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   void initState() {
     super.initState();
     player.open(
-      network,
+      playlist,
       autoStart: true,
     );
   }
@@ -137,11 +126,19 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                   ),
                 ),
                 ListView.builder(
-                  itemCount: videoLinks1.length,
+                  itemCount: videoNames1.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
                     return InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        player.stop();
+                        player.jumpToIndex(index);
+                        scrollController.animateTo(
+                          0,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: Text(
@@ -167,11 +164,19 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                   ),
                 ),
                 ListView.builder(
-                  itemCount: videoLinks2.length,
+                  itemCount: videoNames2.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
                     return InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        player.stop();
+                        player.jumpToIndex(index + 5);
+                        scrollController.animateTo(
+                          0,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: Text(
