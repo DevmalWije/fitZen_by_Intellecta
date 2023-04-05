@@ -58,3 +58,5 @@ with open("randomForest_pose_classifierV2.pkl", "wb") as f:
     pickle.dump(fit_models["rf"], f)
     print('model saved')
     print('--------------------------------')
+
+

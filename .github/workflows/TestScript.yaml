@@ -1,0 +1,65 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: fitZen
+
+on:
+  push:
+    branches: ["deploy"]
+  pull_request:
+    branches: ["deploy"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+          pip install -r requirements.txt
+      - name: Lint with flake8
+        if: always()
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Test with pytest
+        if: always()
+        run: |
+          pytest ./fitzen_backend/unitTests/test_blink_detection.py
+          pytest ./fitzen_backend/unitTests/test_multi_threading_version.py
+
+  #if the above build is successful, then run the following
+  deploy:
+    needs: build
+    if: ${{ success() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: SSH into DigitalOcean droplet
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.IP }}
+          username: root
+          key: ${{ secrets.CD }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            cd /var/www/fitZen_by_Intellecta/
+            git remote set-url origin https://dnadawa:${{ secrets.TOKEN }}@github.com/DevmalWije/fitZen_by_Intellecta.git
+            git stash
+            git pull
+            pm2 stop app
+            pm2 start app

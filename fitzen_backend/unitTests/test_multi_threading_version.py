@@ -38,15 +38,15 @@ class TestImageFrameModel(unittest.TestCase):
     async def test_invalid_image_frame(self):
         # check for invalid type
         with self.assertRaises(TypeError):
-            image_frame_model(None)
+            multiThreadingVersion.image_frame_model(None)
         with self.assertRaises(TypeError):
-            image_frame_model("not an image")
+            multiThreadingVersion.image_frame_model("not an image")
 
         # check for invalid shape
         with self.assertRaises(ValueError):
-            image_frame_model(np.zeros((480, 3), dtype=np.uint8))
+            multiThreadingVersion.image_frame_model(np.zeros((480, 3), dtype=np.uint8))
         with self.assertRaises(ValueError):
-            image_frame_model(np.zeros((640, 480, 4), dtype=np.uint8))
+            multiThreadingVersion.image_frame_model(np.zeros((640, 480, 4), dtype=np.uint8))
 
         # print that the test has passed
         print("test_invalid_image_frame passed")
@@ -61,3 +61,7 @@ class TestImageFrameModel(unittest.TestCase):
 
         # print that the test has passed
         print("test_main_loop passed")
+
+        
+if __name__ == '__main__':
+    unittest.main()
