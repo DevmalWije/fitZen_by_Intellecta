@@ -1,12 +1,11 @@
 mediapipe  
 opencv-python
+pandas
 opencv-contrib-python
-pickle
 numpy
 firebase-admin
 dlib
-cvzone   
-pandas    
+cvzone     
 QtPy  
 tensorflow  
 imutils   
