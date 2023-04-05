@@ -1,3 +1,4 @@
+import 'package:dart_vlc/dart_vlc.dart';
 import 'package:firedart/auth/firebase_auth.dart';
 import 'package:firedart/auth/token_store.dart';
 import 'package:fitzen_frontend/constants.dart';
@@ -33,6 +34,7 @@ Future<void> main() async {
   );
   await dotenv.load(fileName: ".env");
   FirebaseAuth.initialize(dotenv.env['FIREBASE_API_KEY']!, VolatileStore());
+  DartVLC.initialize();
   runApp(FitZen());
 }
 

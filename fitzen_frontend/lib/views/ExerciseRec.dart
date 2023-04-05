@@ -1,5 +1,6 @@
+import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
-// import 'package:video_player/video_player.dart';
+import 'package:fitzen_frontend/constants.dart';
 
 class VideoPlayerPage extends StatefulWidget {
   const VideoPlayerPage({super.key});
@@ -9,8 +10,10 @@ class VideoPlayerPage extends StatefulWidget {
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
-  // late VideoPlayerController controller;
-  bool isPlaying = true;
+  ScrollController scrollController = ScrollController();
+  Player player = Player(id: 69420);
+  Media network = Media.network(
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4');
 
   // Routine 1 video list
   final List<String> videoLinks1 = [
@@ -49,140 +52,139 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   @override
   void initState() {
     super.initState();
-    // controller = VideoPlayerController.asset(
-    //     'assets/videos/${videoLinks1[0]}') // accessing the videos from the video lists
-    //   ..initialize().then((_) {
-    //     setState(() {});
-    //   });
+    player.open(
+      network,
+      autoStart: true,
+    );
   }
 
   @override
   void dispose() {
-    // controller.dispose();
+    player.stop();
+    player.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(
-          height: 400, // wrapped the aspect ratio in a sized box to set the height of the video
-          child: Center(
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Stack(
-                // adding the playpause button
-                alignment: Alignment.bottomCenter,
-                children: [
-                  // VideoPlayer(controller),
-                  IconButton(
-                    icon: Icon(
-                      isPlaying ? Icons.pause : Icons.play_arrow,
-                      color: Colors.white,
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+        child: Scrollbar(
+          thumbVisibility: true,
+          controller: scrollController,
+          child: SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                //app bar
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    BackButton(),
+                    SizedBox(width: 20),
+                    Icon(
+                      Icons.tips_and_updates,
+                      color: kBlue,
+                      size: 30,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        if (isPlaying) {
-                          // controller.pause();
-                        } else {
-                          // controller.play();
-                        }
-                        isPlaying = !isPlaying;
-                      });
-                    },
+                    SizedBox(width: 20),
+                    Text(
+                      "Suggestions",
+                      style: Theme.of(context).textTheme.headline2!.copyWith(
+                            fontSize: 30,
+                          ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Video(
+                    player: player,
+                    height: 500,
+                    progressBarActiveColor: kBlue,
+                    volumeActiveColor: kBlue,
+                    progressBarThumbColor: kBlue,
+                    volumeThumbColor: kBlue,
                   ),
-                ],
-              ),
+                ),
+                SizedBox(height: 10),
+                IconButton(
+                  onPressed: () {
+                    scrollController.animateTo(
+                      500,
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
+                  },
+                  icon: Icon(Icons.arrow_downward),
+                ),
+
+                Text(
+                  // first routine heading
+                  'Routine 1',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                ListView.builder(
+                  itemCount: videoLinks1.length,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Text(
+                          videoNames1[index],
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: 20),
+                // ---------------------------------------
+                Text(
+                  // second routine heading
+                  'Routine 2',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                ListView.builder(
+                  itemCount: videoLinks2.length,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Text(
+                          videoNames2[index],
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
-        const SizedBox(height: 20),
-        // adding a small gap between the 2 routines with a empty SizedBox
-
-        // ----------------------------------
-        const Text(
-          // first routine heading
-          'Routine 1',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Expanded(
-          // looping through the link list 1 and accessing the videos after clicked
-          child: ListView.builder(
-            itemCount: videoLinks1.length,
-            itemBuilder: (BuildContext context, int index) {
-              return InkWell(
-                onTap: () {
-                  // controller.pause();
-                  // controller = VideoPlayerController.asset('assets/videos/${videoLinks1[index]}')
-                  //   ..initialize().then((_) {
-                  //     setState(() {});
-                  //     controller.play();
-                  //   });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Text(
-                    videoNames1[index],
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        //   ],
-        // ),
-        const SizedBox(height: 20),
-        // ---------------------------------------
-        const Text(
-          // second routine heading
-          'Routine 2',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Expanded(
-          // looping through the link list 2 and accessing the videos after clicked
-          child: ListView.builder(
-            itemCount: videoLinks2.length,
-            itemBuilder: (BuildContext context, int index) {
-              return InkWell(
-                onTap: () {
-                  // controller.pause();
-                  // controller = VideoPlayerController.asset('assets/videos/${videoLinks2[index]}')
-                  //   ..initialize().then((_) {
-                  //     setState(() {});
-                  //     controller.play();
-                  //   });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Text(
-                    videoNames2[index],
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        //   ],
-        // ),
-      ],
+      ),
     );
   }
 }
