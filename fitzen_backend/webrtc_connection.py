@@ -26,7 +26,7 @@ class VideoTransformTrack(MediaStreamTrack):
         dict = await multiThreadingVersion.image_frame_model(image)
         blink_dict = blink_detection.detect_blinks(image)
         # print(dict['posture_class'])
-        # print(blink_dict["eye_strain_level"])
+        print(blink_dict["total_blink_count"])
 
         if VideoTransformTrack.channel != None:
             posture_count = 0
