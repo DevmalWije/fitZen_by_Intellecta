@@ -4,10 +4,9 @@ import 'package:fitzen_frontend/views/signup.dart';
 import 'package:fitzen_frontend/widgets/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fitzen_frontend/widgets/customized_textField.dart';
+import 'package:fitzen_frontend/widgets/customized_text_field.dart';
 import 'package:provider/provider.dart';
-
-import 'home.dart';
+import 'package:fitzen_frontend/views/home.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});

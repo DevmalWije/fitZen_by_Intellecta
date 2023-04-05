@@ -1,5 +1,4 @@
 *.jpg
-*.mp4
 *.npy
 *.h5
 serviceAccountKey.json

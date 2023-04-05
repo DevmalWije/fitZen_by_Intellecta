@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../constants.dart';
+import 'package:fitzen_frontend/constants.dart';
 
 class APIService {
   Future sendGETRequest(String endpoint, {Function? onError}) async {
@@ -18,7 +17,6 @@ class APIService {
         return jsonDecode(response.body);
       }
 
-      print("$API/$endpoint");
       String exception = "";
       try {
         exception = jsonDecode(response.body)['error'];

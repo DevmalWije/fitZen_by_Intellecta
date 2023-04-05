@@ -1,15 +1,11 @@
 import 'dart:async';
 
 import 'package:firedart/auth/user_gateway.dart';
-import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/models/user_data.dart';
 import 'package:fitzen_frontend/services/api_service.dart';
 import 'package:fitzen_frontend/services/auth_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../views/login.dart';
 
 class UserController {
   final AuthService _authService = AuthService();

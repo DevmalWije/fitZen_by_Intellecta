@@ -1,7 +1,7 @@
 import 'package:fitzen_frontend/controllers/user_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fitzen_frontend/widgets/customized_textField.dart';
+import 'package:fitzen_frontend/widgets/customized_text_field.dart';
 import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/widgets/button.dart';
 import 'package:provider/provider.dart';

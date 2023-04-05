@@ -1,3 +1,4 @@
+import 'package:dart_vlc/dart_vlc.dart';
 import 'package:firedart/auth/firebase_auth.dart';
 import 'package:firedart/auth/token_store.dart';
 import 'package:fitzen_frontend/constants.dart';
@@ -5,8 +6,6 @@ import 'package:fitzen_frontend/controllers/settings_controller.dart';
 import 'package:fitzen_frontend/controllers/tracking_controller.dart';
 import 'package:fitzen_frontend/controllers/user_controller.dart';
 import 'package:fitzen_frontend/views/splash_screen.dart';
-import 'package:fitzen_frontend/views/tracking_screen.dart';
-import 'package:fitzen_frontend/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,6 +32,7 @@ Future<void> main() async {
   );
   await dotenv.load(fileName: ".env");
   FirebaseAuth.initialize(dotenv.env['FIREBASE_API_KEY']!, VolatileStore());
+  DartVLC.initialize();
   runApp(FitZen());
 }
 
@@ -77,7 +77,7 @@ class FitZen extends StatelessWidget {
             ),
           ),
         ),
-        home: Wrapper(),
+        home: SplashScreen(),
       ),
     );
   }

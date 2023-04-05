@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  dart_vlc
   flutter_webrtc
   local_notifier
   screen_retriever

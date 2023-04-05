@@ -1,4 +1,3 @@
-import 'package:fitzen_frontend/constants.dart';
 import 'package:flutter/material.dart';
 
 class CustomizedTextField extends StatefulWidget {
