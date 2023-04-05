@@ -18,7 +18,7 @@ jobs:
           host: ${{ secrets.IP }}
           username: root
           key: ${{ secrets.CD }}
-          passphrase: ${{ env.SSH_PASSPHRASE }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             # Your SSH commands go here
             echo "Hello, Droplet!"
