@@ -26,7 +26,8 @@ class TrackingController extends ChangeNotifier {
   Timer? _timer;
   PausableTimer? _elapsedTimer;
   int _elapsedSeconds = 0;
-  DateTime? _lastNotificationTime;
+  DateTime? _lastPostureNotificationTime;
+  DateTime? _lastEyeStrainNotificationTime;
   Session? _session;
 
   bool get isStarted => _isStarted;
@@ -174,27 +175,32 @@ class TrackingController extends ChangeNotifier {
 
     eyeHealth = dataMap["eye_strain"] == 0 ? "Good" : "Bad";
     _session = Session.fromJson(dataMap);
-    _lastNotificationTime ??= DateTime.now().subtract(Duration(seconds: 20));
+    _lastPostureNotificationTime ??= DateTime.now().subtract(Duration(seconds: (settingsController.poorPostureNotificationInterval == OFF ? 0 : settingsController.poorPostureNotificationInterval) * 60));
+    _lastEyeStrainNotificationTime ??= DateTime.now();
 
     //sending poor posture notification
     if(posture == "Bad" && settingsController.poorPostureNotificationInterval != OFF){
       DateTime now = DateTime.now();
-      if(now.difference(_lastNotificationTime!).inSeconds > settingsController.poorPostureNotificationInterval * 60){
+      if(now.difference(_lastPostureNotificationTime!).inSeconds > settingsController.poorPostureNotificationInterval * 60){
         LocalNotification notification = LocalNotification(
           title: "Poor Posture Detected!",
         );
         notification.show();
-        _lastNotificationTime = DateTime.now();
+        _lastPostureNotificationTime = DateTime.now();
       }
     }
 
     //sending low blink count notification
     if(settingsController.lowBlinkCountNotification == ON && eyeHealth == "Bad"){
-      LocalNotification notification = LocalNotification(
-        title: "Low Blink Count!",
-        body: "Your blink count has been low in the past 30 seconds. Please blink more!"
-      );
-      notification.show();
+      DateTime now = DateTime.now();
+      if(now.difference(_lastEyeStrainNotificationTime!).inSeconds > 30){
+        LocalNotification notification = LocalNotification(
+            title: "Low Blink Count!",
+            body: "Your blink count has been low in the past 30 seconds. Please blink more!"
+        );
+        notification.show();
+        _lastEyeStrainNotificationTime = DateTime.now();
+      }
     }
 
     //pause and resume the timer based on detection of pose

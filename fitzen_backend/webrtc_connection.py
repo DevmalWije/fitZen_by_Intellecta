@@ -48,7 +48,7 @@ class VideoTransformTrack(MediaStreamTrack):
                         'good_posture_count': dict['good_posture_count'],
                         'bad_posture_count': dict['bad_posture_count'],
                         'total_blink_count': blink_dict['total_blink_count'],
-                        'eye_`strain': blink_dict["eye_strain_level"]
+                        'eye_strain': blink_dict["eye_strain_level"]
                     }))
                     break
 
@@ -75,6 +75,8 @@ async def handleConnection(request):
         if pc.connectionState == "failed":
             await pc.close()
         elif pc.connectionState == "connected":
+            blink_detection.eye_strain_level = 0
+            blink_detection.total_blink_count = 0
             pc.createDataChannel("data")
 
     @pc.on("track")
