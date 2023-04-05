@@ -15,6 +15,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   Player player = Player(id: 69420);
   Media network = Media.network(
       'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4');
+  final playlist = Playlist(
+    medias: [
+      Media.network('https://www.example.com/music.aac'),
+    ],
+  );
 
   // Routine 1 video list
   final List<String> videoLinks1 = [
