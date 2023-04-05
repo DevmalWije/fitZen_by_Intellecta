@@ -1,7 +1,7 @@
 import 'package:fitzen_frontend/constants.dart';
 import 'package:fitzen_frontend/controllers/user_controller.dart';
 import 'package:fitzen_frontend/models/user_data.dart';
-import 'package:fitzen_frontend/views/ExerciseRec.dart';
+import 'package:fitzen_frontend/views/suggestions.dart';
 import 'package:fitzen_frontend/views/login.dart';
 import 'package:fitzen_frontend/views/settings.dart';
 import 'package:fitzen_frontend/views/tracking_screen.dart';

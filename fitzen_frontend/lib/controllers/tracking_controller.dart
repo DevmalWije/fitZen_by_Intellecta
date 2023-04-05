@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:fitzen_frontend/controllers/settings_controller.dart';
 import 'package:fitzen_frontend/models/session.dart';
 import 'package:fitzen_frontend/services/api_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:http/http.dart' as http;
