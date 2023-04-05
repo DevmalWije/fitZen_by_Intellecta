@@ -39,7 +39,7 @@ dlib==19.24.1
 dnspython==2.3.0
 executing==1.2.0
 fastjsonschema==2.16.2
-firebase-admin==6.1.0
+firebase-admin==6.0.1
 Flask==2.2.3
 flatbuffers==23.1.21
 fonttools==4.38.0
@@ -121,7 +121,7 @@ platformdirs==3.0.0
 plyer==2.1.0
 prometheus-client==0.16.0
 prompt-toolkit==3.0.37
-protobuf>=4.21.6
+protobuf==3.20.3
 proto-plus==1.22.2
 psutil==5.9.4
 pure-eval==0.2.2
