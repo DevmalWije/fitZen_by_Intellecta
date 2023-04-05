@@ -5,16 +5,16 @@ name: fitZen
 
 on:
   push:
-    branches: ["main"]
+    branches: ["deploy"]
   pull_request:
-    branches: ["main"]
+    branches: ["deploy"]
 
 permissions:
   contents: read
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -39,3 +39,27 @@ jobs:
         run: |
           pytest ./fitzen_backend/unitTests/test_blink_detection.py
           pytest ./fitzen_backend/unitTests/test_multi_threading_version.py
+
+  #if the above build is successful, then run the following
+  deploy:
+    needs: build
+    if: ${{ success() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: SSH into DigitalOcean droplet
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.IP }}
+          username: root
+          key: ${{ secrets.CD }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            cd /var/www/fitZen_by_Intellecta/
+            git remote set-url origin https://dnadawa:${{ secrets.TOKEN }}@github.com/DevmalWije/fitZen_by_Intellecta.git
+            git stash
+            git pull
+            pm2 stop app
+            pm2 start app

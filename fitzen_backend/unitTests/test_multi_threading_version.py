@@ -1,16 +1,16 @@
+import multiThreadingVersion
+import unittest
+import cv2
+import numpy as np
+import multiprocessing
+import asyncio
 import os
 import sys
 
-#MAKE SURE THESE ARE STATED PRIOR TO IMPORTING ANYTHING FROM THE FITZEN_BACKEND FOLDER
+# MAKE SURE THESE ARE STATED PRIOR TO IMPORTING ANYTHING FROM THE FITZEN_BACKEND FOLDER
 sys.path.insert(0, '..')
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-import asyncio
-import multiprocessing
-import numpy as np
-import cv2
-import unittest
-import multiThreadingVersion
+sys.path.insert(0, os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..')))
 
 
 class TestImageFrameModel(unittest.TestCase):
@@ -38,15 +38,17 @@ class TestImageFrameModel(unittest.TestCase):
     async def test_invalid_image_frame(self):
         # check for invalid type
         with self.assertRaises(TypeError):
-            image_frame_model(None)
+            multiThreadingVersion.image_frame_model(None)
         with self.assertRaises(TypeError):
-            image_frame_model("not an image")
+            multiThreadingVersion.image_frame_model("not an image")
 
         # check for invalid shape
         with self.assertRaises(ValueError):
-            image_frame_model(np.zeros((480, 3), dtype=np.uint8))
+            multiThreadingVersion.image_frame_model(
+                np.zeros((480, 3), dtype=np.uint8))
         with self.assertRaises(ValueError):
-            image_frame_model(np.zeros((640, 480, 4), dtype=np.uint8))
+            multiThreadingVersion.image_frame_model(
+                np.zeros((640, 480, 4), dtype=np.uint8))
 
         # print that the test has passed
         print("test_invalid_image_frame passed")
@@ -61,3 +63,7 @@ class TestImageFrameModel(unittest.TestCase):
 
         # print that the test has passed
         print("test_main_loop passed")
+
+
+if __name__ == '__main__':
+    unittest.main()
