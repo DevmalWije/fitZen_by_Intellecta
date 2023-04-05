@@ -17,7 +17,7 @@ jobs:
         with:
           host: ${{ secrets.IP }}
           username: root
-          key: ${{ secrets.CD }}
+        #   key: ${{ secrets.CD }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: 22
           script: |
