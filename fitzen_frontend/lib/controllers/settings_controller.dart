@@ -32,6 +32,7 @@ class SettingsController extends ChangeNotifier{
   }
 
   _saveToStorage() async {
+    //saving settings to the local storage
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(POOR_POSTURE_KEY, _poorPostureNotificationInterval);
     prefs.setInt(LOW_BLINK_COUNT_KEY, _lowBlinkCountNotification);
@@ -39,6 +40,7 @@ class SettingsController extends ChangeNotifier{
   }
 
   fetchFromStorage() async {
+    //fetching settings from the local storage
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _poorPostureNotificationInterval = prefs.getInt(POOR_POSTURE_KEY) ?? _poorPostureNotificationInterval;
     _lowBlinkCountNotification = prefs.getInt(LOW_BLINK_COUNT_KEY) ?? _lowBlinkCountNotification;

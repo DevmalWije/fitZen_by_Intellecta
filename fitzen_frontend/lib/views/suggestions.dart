@@ -13,6 +13,7 @@ class VideoPlayerPage extends StatefulWidget {
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
   ScrollController scrollController = ScrollController();
   Player player = Player(id: 69420);
+  //create a playlist with videos
   final playlist = Playlist(
     medias: [
       Media.network('https://firebasestorage.googleapis.com/v0/b/flash-chat-64d66.appspot.com/o/intro.mp4?alt=media&token=7b39e9eb-2971-4578-9824-f6173a7ac229'),
