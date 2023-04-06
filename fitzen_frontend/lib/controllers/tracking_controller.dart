@@ -36,6 +36,7 @@ class TrackingController extends ChangeNotifier {
   String get posture => _posture;
   String get eyeHealth => _eyeHealth;
   String get elapsedSeconds {
+    //convert seconds to hh:mm:ss format
     final hours = _elapsedSeconds ~/ 3600;
     final minutes = (_elapsedSeconds ~/ 60) % 60;
     final seconds = _elapsedSeconds % 60;
@@ -80,6 +81,7 @@ class TrackingController extends ChangeNotifier {
   }
 
   Future<void> _negotiateRemoteConnection(BuildContext context, SettingsController settingsController) async {
+    //initialize a webrtc connection with the server
     return _peerConnection!
         .createOffer()
         .then((offer) {
@@ -107,6 +109,8 @@ class TrackingController extends ChangeNotifier {
 
           String data = "";
           if (response.statusCode == 200) {
+
+            //create a timer to calculate the user's sitting time
             _elapsedTimer = PausableTimer(Duration(seconds: 1), () {
               _elapsedSeconds++;
 
@@ -123,6 +127,7 @@ class TrackingController extends ChangeNotifier {
               notifyListeners();
               _elapsedTimer!..reset()..start();
             })..start();
+
             data = await response.stream.bytesToString();
             var dataMap = json.decode(data);
             await _peerConnection!.setRemoteDescription(
@@ -174,6 +179,8 @@ class TrackingController extends ChangeNotifier {
 
     eyeHealth = dataMap["eye_strain"] == 0 ? "Good" : "Bad";
     _session = Session.fromJson(dataMap);
+
+    //setting initial last notification time
     _lastPostureNotificationTime ??= DateTime.now().subtract(Duration(seconds: (settingsController.poorPostureNotificationInterval == OFF ? 0 : settingsController.poorPostureNotificationInterval) * 60));
     _lastEyeStrainNotificationTime ??= DateTime.now();
 
@@ -212,13 +219,13 @@ class TrackingController extends ChangeNotifier {
 
   Future<void> startConnection(BuildContext context, SettingsController settingsController) async {
     isLoading = true;
-    //* Create Peer Connection
+    //create peer connection
     if (_peerConnection != null) return;
     _peerConnection = await createPeerConnection({
       'sdpSemantics': 'unified-plan',
     });
 
-    //* Create Data Channel
+    //create data channel
     _dataChannelDict = RTCDataChannelInit();
     _dataChannelDict!.ordered = true;
     _dataChannel = await _peerConnection!.createDataChannel(
@@ -244,6 +251,7 @@ class TrackingController extends ChangeNotifier {
     };
 
     try {
+      //getting user's webcam
       var stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
       _localStream = stream;
        _localRenderer.srcObject = _localStream;
@@ -251,6 +259,7 @@ class TrackingController extends ChangeNotifier {
         _peerConnection!.addTrack(element, stream);
       });
 
+      //stop the video transmission and restart the transmission to remove frame buffer
       _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
         List<RTCRtpTransceiver> transceivers = await _peerConnection!.getTransceivers();
         RTCRtpTransceiver videoTransceiver = transceivers.firstWhere(
@@ -300,6 +309,7 @@ class TrackingController extends ChangeNotifier {
   }
 
   sendDataToDatabase(Session session) async {
+    //send post request to the backend
     isLoading = true;
     session.elapsedSeconds = _elapsedSeconds;
     APIService apiService = APIService();

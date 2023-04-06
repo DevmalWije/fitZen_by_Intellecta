@@ -52,9 +52,8 @@ class UserController {
   }
 
 
-  //database
-
   Future<UserData?> fetchData(BuildContext context) async {
+    //fetch user data from the database
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String uid = prefs.getString("uid") ?? "";
 
