@@ -11,13 +11,9 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Join the current directory with the filename to get the absolute path of the file
 model_file = os.path.join(current_dir, "blink_detect_model.dat")
-
 cap = cv2.VideoCapture(0)
-
 start_time = datetime.datetime.now()
-
 face_detector = dlib.get_frontal_face_detector()
-
 eye_landmark_predictor = dlib.shape_predictor(model_file)
 
 # initializing the counter for the number of blinks
@@ -27,8 +23,6 @@ total_blink_count = 0
 eye_strain_level = 0
 
 # main export function
-
-
 def detect_blinks(frame):
 
     global blink_count
@@ -72,15 +66,9 @@ def detect_blinks(frame):
     return blink_dict
 
 # to get the middle point of an eye to draw vertical line
-
-
 def mid_point(p1, p2):
     return int((p1.x + p2.x)/2), int((p1.y + p2.y)/2)
-
-
-font = cv2.FONT_HERSHEY_PLAIN
-
-
+# font = cv2.FONT_HERSHEY_PLAIN
 def get_ratio_of_blinking(frame, points_of_eye, facila_landmarks):
     try:
         # to get the left and right point of an eye to draw a horizontal line
@@ -96,12 +84,12 @@ def get_ratio_of_blinking(frame, points_of_eye, facila_landmarks):
             points_of_eye[5]), facila_landmarks.part(points_of_eye[4]))
 
         # to draw the horizontal line in an eye
-        horizontal_line = cv2.line(
-            frame, left_point, right_point, (0, 255, 0), 2)
+        # horizontal_line = cv2.line(
+        #     frame, left_point, right_point, (0, 255, 0), 2)
 
-        # to vertical line in eye
-        vertical_line = cv2.line(
-            frame, top_center, bottom_center, (0, 255, 0), 2)
+        # # to vertical line in eye
+        # vertical_line = cv2.line(
+        #     frame, top_center, bottom_center, (0, 255, 0), 2)
 
         length_of_ver_line = hypot(
             (top_center[0] - bottom_center[0]), (top_center[1] - bottom_center[1]))
@@ -115,7 +103,6 @@ def get_ratio_of_blinking(frame, points_of_eye, facila_landmarks):
         print('Invalid Parameters')
     except Exception:
         raise RuntimeError
-
 
 def test_get_ratio_of_blinking():
     frame = np.ones((512, 512, 3), np.uint8)

@@ -9,15 +9,11 @@ from av import VideoFrame
 relay = MediaRelay()
 
 class VideoTransformTrack(MediaStreamTrack):
-    """
-    A video stream track that transforms frames from an another track.
-    """
-
     kind = "video"
     channel = None
 
     def __init__(self, track):
-        super().__init__()  # don't forget this!
+        super().__init__()
         self.track = track
 
     async def recv(self):
@@ -25,8 +21,8 @@ class VideoTransformTrack(MediaStreamTrack):
         image = frame.to_rgb().to_ndarray()
         dict = await multiThreadingVersion.image_frame_model(image)
         blink_dict = blink_detection.detect_blinks(image)
-        # print(dict['posture_class'])
-        # print(blink_dict["eye_strain_level"])
+        print(dict['posture_class'])
+        print(blink_dict["total_blink_count"])
 
         if VideoTransformTrack.channel != None:
             posture_count = 0
@@ -75,6 +71,7 @@ async def handleConnection(request):
         if pc.connectionState == "failed":
             await pc.close()
         elif pc.connectionState == "connected":
+            #resetting values when new connection established
             blink_detection.eye_strain_level = 0
             blink_detection.total_blink_count = 0
             pc.createDataChannel("data")

@@ -74,7 +74,6 @@ async def addSession(request):
         
         doc = db.collection("users").document(data['uid']).get()
         if doc.exists:
-            doc_data = doc.to_dict()
             db.collection("users").document(data['uid']).update({
                 "elapsedSeconds": firestore.Increment(data['elapsedSeconds']),
                 "badPostureCount": firestore.Increment(data['badPostureCount']),
