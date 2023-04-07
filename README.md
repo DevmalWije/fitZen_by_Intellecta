@@ -14,28 +14,40 @@ To run and/or experiment on backend side, the following dependancies
 should be installed, ideally creat a Virtual environment and use command "pip install <module-name>"
 in the terminal, always check if you have already installed them using the command "pip list"
 
-Mediapipe,
-OpenCV,
-panda,
-Pickle,
-Pillow,
-tensorflow,
-Keras
+mediapipe, 
+opencv-python,
+pandas,
+opencv-contrib-python,
+numpy,
+firebase-admin,
+dlib,
+cvzone,     
+QtPy,
+tensorflow,  
+imutils,   
+h5py, 
+Flask,  
+aiortc, 
+aiohttp, 
+av, 
+scikit-learn, 
+Pillow
 
 # Installation
 
 1. Clone the repository
 2. Install the required dependencies
-   pip install -r requirements.txt
+3. pip install -r requirements.txt
 
 # Usage
 
-1. Run the main.py file
+1. CD into fitzen_backend folder
+2. Run the app.py file
+3. Run FitZen.exe application
 
 # Output
-
+The FitZen application will install a shortcut on the desktop. When the application is run, it will open the application asking to log in. The user can log in or sign up. Once logged in, the application will open to the home screen. The home screen will display the user's posture and the time spent in each posture. The user can click on the "Start" button to start the posture detection. The user can click on the "Stop" button to stop the posture detection. The user can click on the "History" button to view the user's posture history. The user can click on the "Settings" button to change the user's settings. The user can click on the "Logout" button to log out of the application. The user can click on the "Exit" button to exit the application.
 The program will output the detected posture class and the timestamp of detection to a text file called posture.txt in the project directory. The file can be read and processed to obtain information on the user's posture over time.
-
 # Authors
 
 This project was developed by the following members of the SDGP group:
